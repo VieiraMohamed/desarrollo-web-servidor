@@ -72,7 +72,10 @@
                 break;
             default:
             echo "<p>Hoy es $dia y no tenemos clase</p>";
-        }
+        }/* 
+            CON LA ESTRUCTURA SWITCH CAMBIAR LA VARIABLE DIA A ESPAÑOL DENTRO DE CADA CASO
+            $dia = lunes, si es lunes $dia = miercoles, si es miercoles y asi con todo
+        */
     ?>
 </body>
 </html>
