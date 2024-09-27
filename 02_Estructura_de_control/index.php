@@ -29,7 +29,22 @@
                     <a href="fechas.php">fechas.php</a>
                 </td>
                 <td>
-                    Ejercicios de fechas con la función date().
+                de comparación con números       </td>
+            </tr>
+            <tr>
+                <td>
+                    <a href="Ejercicios.php">Ejercicios.php</a>
+                </td>
+                <td>
+                    Ejercicios 
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <a href="bucles.php">Bucles.php</a>
+                </td>
+                <td>
+                    Bucles
                 </td>
             </tr>
         </tbody>

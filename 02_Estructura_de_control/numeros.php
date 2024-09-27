@@ -91,6 +91,17 @@
             echo "<p>El numero $numero_aleatorio tiene 3 digitos</p>";
          */
 
+
+         //VERSIÓN CON MATCH
+         $digitos = match (true) {
+             $numero_aleatorio >= 1 && $numero_aleatorio <= 9 => 3,
+             $numero_aleatorio >= 10 && $numero_aleatorio <= 99 => 2,
+             $numero_aleatorio >= 100 && $numero_aleatorio <= 999 => 3,
+             default => "<p>ERROR</p>"
+         };
+
+         echo "</h1>El número tiene $digitos dígitos to way</h1>";
+
          //FORMA 3
 
          if($numero_aleatorio >= 0 and $numero_aleatorio < 10):
@@ -109,7 +120,7 @@
         if($digitos_texto == 1)$digitos_texto = digito;
         echo "<p>El numero $numero_aleatorio tiene $digitos $digitos_texto</p>";
 
-        $n = rand (1,3);
+        $n = rand (1,3);/* "rand" es como el math ramdon que va desde el 1 al 3 */
 
         switch($n){
             case 1:
@@ -119,8 +130,15 @@
                 echo "<p>El número es 2</p>";
                 break;
         default:
-                echo "El número es 3";
+                echo "<p>El número es 3</p>";
         }
+
+        $resultado = match($n){
+            1 => "<p>El número es 1</p>",
+            2 => "<p>El número es 2</p>",
+            3 => "<p>El número es 3</p>"
+        };
+        echo "<h3>$resultado</h3>";
     ?>
 </body>
 </html>

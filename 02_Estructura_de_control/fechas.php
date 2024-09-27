@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fechas</title>
+    <!-- estas lineas de abajo son para que salgan en el navegeador los fallos -->
+    <?php
+        error_reporting( E_ALL );
+        ini_set( "display_errors", 1 );    
+    ?>
 </head>
 <body>
     <?php
@@ -76,6 +81,20 @@
             CON LA ESTRUCTURA SWITCH CAMBIAR LA VARIABLE DIA A ESPAÑOL DENTRO DE CADA CASO
             $dia = lunes, si es lunes $dia = miercoles, si es miercoles y asi con todo
         */
+
+        $dia = date("l");
+        $dia_espanol = null;
+
+        $dia_espanol = match ($dia) {
+            "Monday" => "Lunes",
+            "Tuesday" => "Martes",
+            "Wednesday" => "Miércoles",
+            "Thursday" => "Jueves",
+            "Friday" => "Viernes",
+            "Saturday" => "Sabado",
+            "Sunday" => "Domingo"
+        };
+        echo "<p>Hoy es $dia_espanol</p>";
     ?>
 </body>
 </html>
