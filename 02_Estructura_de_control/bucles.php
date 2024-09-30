@@ -17,7 +17,7 @@
         echo "</ul>";
     ?>
 
-<h1> Lista con While alternative</h1>
+    <h1> Lista con While alternative</h1>
     <?php
         $i =1;
         echo "<ul>";
@@ -26,6 +26,39 @@
             $i++;
         endwhile;
         echo "</ul>";
+    ?>
+    <h1>Lista con FOR</h1>
+    
+    <?php
+    echo ("<ul>");
+        for($i = 1;$i <= 10;$i++){
+            echo ("<li>$i</li>");
+        }
+        echo ("</ul>")
+    ?>
+    <h1>Lista con FOR alternativo</h1>
+    
+    <?php
+    echo ("<ul>");
+        for($i = 1;$i <= 10;$i++):
+            echo ("<li>$i</li>");
+        endfor;
+        echo ("</ul>")
+    ?>
+
+        
+   <h1>Lista con FOR con BREAK cursed0</h1>
+    
+    <?php
+    //Código ofuscado
+        echo ("<ul>");
+        for($i = 1; ;$i++){
+            if($i > 10){
+                break;
+            }
+            echo ("<li>$i</li>");
+        }
+        echo ("</ul>")
     ?>
 
     

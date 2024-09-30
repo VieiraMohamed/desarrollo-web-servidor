@@ -47,6 +47,14 @@
                     Bucles
                 </td>
             </tr>
+            <tr>
+                <td>
+                    <a href="../03_Arrays/Ejemplo.php">Arrays.php</a>
+                </td>
+                <td>
+                    Arrays
+                </td>
+            </tr>
         </tbody>
     </table>
 </body>

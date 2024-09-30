@@ -74,7 +74,7 @@
         echo "La suma de los numeros pares entre 1 y 20 es: ";
         while($count <= 20){
             if($count % 2 == 0){
-                $suma =$suma+$count;
+                $suma +=$count;
             }
             $count++;
         }
@@ -86,15 +86,16 @@
       
 
        /*  EJERCICIO 4: CALCULAR EL FACTORIAL DE 6 CON WHILE  */
-       echo "<br>Ejercicio 4";
+       echo "<p>Ejercicio 4</p>";
 
-       $contador = 1;
+        $contador = 1;
         $total = 1;
-       while($contador <= 6){
+        $factorial = 6;
+       while($contador <= $factorial){
         $total *= $contador;
         $contador++;
        }
-       echo "<br>El factorial de 6 es: $total<br>"
+       echo "<p>El factorial de 6 es: $total</p>"
 
      ?>
 
@@ -106,7 +107,49 @@
             }
             return $numero * factorial($numero-1);
         }
-        echo "<br>El factorial de 6 es:".factorial(6);
+        echo "<br>El factorial de $factorial es: ".factorial(6);
+     ?>
+     <h3>Ejercicio 5</h3>
+     <p> Muestra por pantalla los 50 primeros numeros primos</p>
+
+     <?php
+        /* 
+        4 % 2 = 0   4 NO ES PRIMO
+        4 % 3 = 1
+        
+        5 % 2 = 1
+        5 % 3 = 2   5 SI ES PRIMO
+        5 % 4 = 1
+
+        BUCLE DE 2 A N-1
+
+        $n = 7;
+        desde 2 hasta $n-1
+        comprobar si 7 tiene divisores que den de resto 0
+        si existe entonces devolver falso
+        else devolver true
+        fin
+         */
+        $n = 2;
+        $numerosPrimos = 0;
+        echo "<ol>";
+        while($numerosPrimos < 50){
+            $esPrimo = true;
+            for ($i = 2; $i < $n; $i++){
+               if($n % $i == 0 ){//no es primo
+                $esPrimo= false;
+                break;
+              }
+            }
+            if($esPrimo){
+                $numerosPrimos++;
+                echo "<li>$n</li>";
+            }
+            $n++;
+        }
+        echo "</ol>"
+        
+         //var_dump ($esPrimo);
      ?>
      
      
