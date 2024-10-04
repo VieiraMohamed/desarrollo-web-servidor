@@ -297,7 +297,13 @@
             ?>
         </tbody>
     </table>
-
+                <!-- Insertar dos nuevos estudiantes con notas aleatorias entre 0 y 10
+                 
+                 borrar un estudiante (el peor que nos caiga) por la clave
+                 
+                 Mostrar en una nueva tabla todo ordenado por los nombres en orden alfabeticamente inverso
+                 
+                 Mostrar en una nueva tabla todo ordenado por la nota de 10 a 0(orden inverso-->
 
 </body>
 </html>
