@@ -280,11 +280,14 @@
         </thead>
         <tbody>
             <?php
-            /* sort($asignatura) = ordena aascendente
-                asort($asignatura) = ordena ascendente  y mantiene las claves
-                arsort($asignatura) = ordena descendiente y mantiene las claves
-               krsort($asignatura) =  ordenar descendiente y mantiene las claves
-               ksort($asignatura) = ordena ascendiente y mantiene las claves
+            /* 
+                sort(): Ordena un array en orden ascendente.
+                rsort(): Ordena un array en orden descendente.
+                asort(): Ordena un array en orden ascendente y mantiene la asociación de índices.
+                arsort(): Ordena un array en orden descendente y mantiene la asociación de índices.
+                ksort(): Ordena un array por clave en orden ascendente.
+                krsort(): Ordena un array por clave en orden descendente.
+               
                */
                
             ksort($asignaturas);
@@ -297,13 +300,118 @@
             ?>
         </tbody>
     </table>
-                <!-- Insertar dos nuevos estudiantes con notas aleatorias entre 0 y 10
+                <!-- Insertar dos nuevos estudiantes con notas aleatorias entre 0 y 10 >>     HECHO
                  
-                 borrar un estudiante (el peor que nos caiga) por la clave
+                 borrar un estudiante (el peor que nos caiga) por la clave >>      HECHO
                  
-                 Mostrar en una nueva tabla todo ordenado por los nombres en orden alfabeticamente inverso
+                 Mostrar en una nueva tabla todo ordenado por los nombres en orden alfabeticamente inverso  >>     HECHO
                  
-                 Mostrar en una nueva tabla todo ordenado por la nota de 10 a 0(orden inverso-->
-
+                 Mostrar en una nueva tabla todo ordenado por la nota de 10 a 0(orden inverso)    >>    HECHO
+                 -->
+    <table>
+        <thead>
+            <tr>
+                <th>Alumno</th>
+                <th>Nota</th>
+                <th>Resultado</th>
+            </tr>
+            </thead>
+            <tbody>
+                <h3>Asignatura</h3>
+                <?php
+                    $random= rand(0,10);
+                    $random2= rand(0,10);
+                    $notas=[
+                        "Francisco"=> "3",
+                        "Daniel"=> "5",
+                        "Aurora"=> "10",
+                        "Luis"=> "7",
+                        "Samuel"=> "9",
+                        "Aurelio" => $random,
+                        "Nuria" => $random2,
+                    ];
+                    unset($notas["Aurora"]);//BORRANDO UNa PERSONA DEL ARRAY
+                    foreach($notas as $alumno=>$nota){
+                        if($nota<5) echo "<tr class='rojo'>";  
+                        else if($notas >= 5) echo "<tr class='verde'>"; 
+                                      
+                ?>
+                <td><?php echo "$alumno"?></td>
+                <td><?php echo "$nota"?></td>
+                <?php if($nota>=5) echo "<td>Aprobado</td>";
+                    else echo "<td>Suspenso</td>";
+                ?>
+                </tr>
+                <?php } ?>
+            </tbody>
+        
+    </table>
+    <table>
+        <thead>
+            <tr>
+                <th>Alumno</th>
+                <th>Nota</th>
+                <th>Resultado</th>
+            </tr>
+        </thead>
+        <tbody>
+            <h3>Asignatura</h3>
+            <?php
+                $random=rand(0,10);
+                $random2=rand(0,10);
+                $notas=[
+                    "Alejo" => "8",
+                    "Jose" => "9",
+                    "Aurelio" => $random,
+                    "Nuria" => $random2,
+                ];
+                krsort($notas);//ordenar el array de forma descendiente manteniendo la clave
+                foreach($notas as $alumno => $nota){  
+                    if($nota <5) echo "<tr class='rojo'>";
+                    else  echo "<tr class='verde'>";
+            ?>
+            <td><?php echo "$alumno"?></td>
+            <td><?php echo "$nota"?></td>
+            <?php if($nota>=5) echo "<td>Aprobado</td>";
+                    else echo "<td>Suspenso</td>"
+            ?>
+            </tr>
+            <?php }?>
+        </tbody>
+    </table>
+    <table>
+        <thead>
+            <tr>
+                <th>Alumno</th>
+                <th>Nota</th>
+                <th>Resultado</th>
+            </tr>
+        </thead>
+        <tbody>
+            <h3>Asignatura</h3>
+            <?php
+                $random = rand(0,10);
+                $random2 = rand(0,10);
+                $notas=[
+                    "Alejo" => "8",
+                    "Jose" => "9",
+                    "Aurelio" => $random,
+                    "Nuria" => $random2,
+                ];
+                arsort($notas);
+                foreach($notas as $alumno => $nota){
+                    if($nota < 5) echo "<tr class='rojo'>";
+                    else echo "<tr class='verde'>";
+                
+            ?>
+            <td><?php echo "$alumno"?></td>
+            <td><?php echo "$nota"?></td>
+            <?php if($nota <5) echo "<td>Aprobado</td>";
+                else echo "<td>Suspenso</td>";
+            ?>
+            </tr>
+            <?php }?>
+        </tbody>
+    </table>
 </body>
 </html>
