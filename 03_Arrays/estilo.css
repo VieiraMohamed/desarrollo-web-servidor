@@ -10,8 +10,8 @@ caption{
     border: 2px solid pink;
 }
 .rojo{
-    color: red;
+    background-color: red;
 }
 .verde{
-    color: green;
+    background-color: rgb(94, 196, 94);
 }

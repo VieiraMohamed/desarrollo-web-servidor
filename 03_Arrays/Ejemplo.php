@@ -202,12 +202,12 @@
                 <h3>Asignatura</h3>
                 <?php
                     $asignaturas =[
-                        "Alejandra"=> "Desarrollo web en entorno servidor",
-                        "José Miguel"=> "Desarrollo web en entorno cliente",
-                        "José Miguel"=> "Diseño de interfaces web",
-                        "Jaime"=> "Despliegue de aplicaciones",
-                        "Andrea"=> "Empresa e iniciativa emprendedora",
-                        "Virginia"=> "Inglés",
+                         "Desarrollo web en entorno servidor" => "Alejandra",
+                        "Desarrollo web en entorno cliente" => "José Miguel",
+                        "Diseño de interfaces web" => "José Miguel",
+                        "Despliegue de aplicaciones" => "Jaime",
+                        "Empresa e iniciativa emprendedora" => "Andrea",
+                        "Inglés" => "Virginia",
                     ];
                     foreach($asignaturas as $profesor => $asignatura) { ?>
                     <tr>
@@ -270,6 +270,33 @@
                     <?php } ?>
             </tbody>
     </table> 
+
+    <table>
+        <thead>
+            <tr>
+                <th>Asignatura</th>
+                <th>Profesor</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            /* sort($asignatura) = ordena aascendente
+                asort($asignatura) = ordena ascendente  y mantiene las claves
+                arsort($asignatura) = ordena descendiente y mantiene las claves
+               krsort($asignatura) =  ordenar descendiente y mantiene las claves
+               ksort($asignatura) = ordena ascendiente y mantiene las claves
+               */
+               
+            ksort($asignaturas);
+                foreach($asignaturas as $asignatura => $profesor){
+                    echo "<tr>";
+                    echo "<td>$asignatura</td>";
+                    echo "<td>$profesor</td>";
+                    echo "</tr>";
+                }
+            ?>
+        </tbody>
+    </table>
 
 
 </body>
