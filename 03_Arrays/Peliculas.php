@@ -20,12 +20,23 @@
             ["Cariño he encogido a los niños", "Aventura", 2001],
             ["Pokemon","Aventura", 2006]
         ];
+        $nuevo_pelicula=["Blow","Drama",2004,];//crear un nuevo registro para meter en el array
+        array_push($peliculas,$nuevo_pelicula);
+
+        for($i =0;$i< count($peliculas);$i++){
+            $peliculas[$i][3] = rand(30,240);
+            if($peliculas[$i][3]< 60){
+                $peliculas[$i][3]= "Cortometraje";
+            }else{
+                $peliculas[$i][3]= "Largometraje";
+            }
+        }
 
         /* 
             1.AÑADIR CON UN RAND, LA DURACIÓN DE CADA PELICULA.
             LA DURACIÓN SERÁ UN NÚMERO ENTRE 30 Y 240 SEGUNDOS
 
-            2.AÑADIRCOMO UNA NUEVA COLUMNA , EL TIPODE PELÍCULA
+            2.AÑADIRCOMO UNA NUEVA COLUMNA , EL TIPO DE PELÍCULA
             CORTOMETRAJE,SI LA DURACIÓN ES MENOR QUE 60
             LARGOMETRAJE,SI LA DURACIÓN ES MAYOR O IGUAL QUE 60
 
@@ -44,20 +55,53 @@
                 <th>Película</th>
                 <th>Género</th>
                 <th>Año</th>
+                <th>Duración</th>
             </tr>
         </thead>
         <tbody>
         <?php
             foreach($peliculas as $pelicula){
-                list($titulo,$genero,$año) = $pelicula;
+                list($titulo,$genero,$año,$duracion) = $pelicula;
                 echo "<tr>";
                 echo "<td>$titulo</td>";
                 echo "<td>$genero</td>";
                 echo "<td>$año</td>";
+                echo "<td>$duracion</td>";
                 echo"</tr>";
             };
         ?>
     </tbody>
+    </table>
+        
+
+    <table>
+        <thead>
+            <tr>
+                <th>Película</th>
+                <th>Género</th>
+                <th>Año</th>
+                <th>Duración</th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php
+            $_genero = array_column($peliculas, 1);
+            $_anno = array_column($peliculas,2);
+            $_titulo= array_column($peliculas,0);
+
+            array_multisort($_genero,SORT_ASC,$_anno, SORT_DESC,$_titulo,SORT_ASC,$peliculas);
+
+            foreach($peliculas as $pelicula){
+                list($titulo,$genero,$año,$duracion) = $pelicula;
+                echo "<tr>";
+                echo "<td>$titulo</td>";
+                echo "<td>$genero</td>";
+                echo "<td>$año</td>";
+                echo "<td>$duracion</td>";
+                echo"</tr>";
+            };
+        ?>
+        </tbody>
     </table>
     
     
