@@ -281,6 +281,8 @@
         <tbody>
             <?php
             /* 
+                ESTO SOLO VALE PARA ARRAY NORMALES
+                
                 sort(): Ordena un array en orden ascendente.
                 rsort(): Ordena un array en orden descendente.
                 asort(): Ordena un array en orden ascendente y mantiene la asociación de índices.
@@ -300,7 +302,8 @@
             ?>
         </tbody>
     </table>
-                <!-- Insertar dos nuevos estudiantes con notas aleatorias entre 0 y 10 >>     HECHO
+                <!--
+                 Insertar dos nuevos estudiantes con notas aleatorias entre 0 y 10 >>     HECHO
                  
                  borrar un estudiante (el peor que nos caiga) por la clave >>      HECHO
                  
@@ -308,6 +311,9 @@
                  
                  Mostrar en una nueva tabla todo ordenado por la nota de 10 a 0(orden inverso)    >>    HECHO
                  -->
+
+                 <!-- $e
+                $notas=["Paula"]= rand(0,10);  para añadir un estudiante -->
     <table>
         <thead>
             <tr>
@@ -330,7 +336,7 @@
                         "Aurelio" => $random,
                         "Nuria" => $random2,
                     ];
-                    unset($notas["Aurora"]);//BORRANDO UNa PERSONA DEL ARRAY
+                    unset($notas["Aurora"]);//BORRANDO UNA PERSONA DEL ARRAY
                     foreach($notas as $alumno=>$nota){
                         if($nota<5) echo "<tr class='rojo'>";  
                         else if($notas >= 5) echo "<tr class='verde'>"; 
@@ -347,6 +353,7 @@
         
     </table>
     <table>
+        <caption>Estudiantes ordenados por el nombre al revés</caption>
         <thead>
             <tr>
                 <th>Alumno</th>
@@ -380,6 +387,7 @@
         </tbody>
     </table>
     <table>
+        <caption>Estudiantes ordenados de menor a mayor la nota</caption>
         <thead>
             <tr>
                 <th>Alumno</th>

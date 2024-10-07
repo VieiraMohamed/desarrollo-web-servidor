@@ -1,13 +1,13 @@
 table{
-    border: 1px solid purple;
+    border: 2px solid rgb(141, 46, 141);
     border-collapse: collapse;
 }
-th, td{
-border: 2px solid palevioletred;
+th, td, tr{
+    border: 2px solid black;
 }
 
 caption{
-    border: 2px solid pink;
+    border: 2px solid black;
 }
 .rojo{
     background-color: red;
