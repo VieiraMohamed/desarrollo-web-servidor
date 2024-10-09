@@ -26,9 +26,9 @@
         for($i =0;$i< count($peliculas);$i++){
             $peliculas[$i][3] = rand(30,240);
             if($peliculas[$i][3]< 60){
-                $peliculas[$i][3]= "Cortometraje";
+                $peliculas[$i][4]= "Cortometraje";
             }else{
-                $peliculas[$i][3]= "Largometraje";
+                $peliculas[$i][4]= "Largometraje";
             }
         }
 
@@ -73,7 +73,7 @@
     </tbody>
     </table>
         
-
+            <br><br>
     <table>
         <thead>
             <tr>
@@ -81,6 +81,7 @@
                 <th>Género</th>
                 <th>Año</th>
                 <th>Duración</th>
+                <th>Tipo</th>
             </tr>
         </thead>
         <tbody>
@@ -92,12 +93,13 @@
             array_multisort($_genero,SORT_ASC,$_anno, SORT_DESC,$_titulo,SORT_ASC,$peliculas);
 
             foreach($peliculas as $pelicula){
-                list($titulo,$genero,$año,$duracion) = $pelicula;
+                list($titulo,$genero,$año,$duracion,$tipo) = $pelicula;
                 echo "<tr>";
                 echo "<td>$titulo</td>";
                 echo "<td>$genero</td>";
                 echo "<td>$año</td>";
                 echo "<td>$duracion</td>";
+                echo "<td>$tipo</td>";
                 echo"</tr>";
             };
         ?>
