@@ -29,15 +29,13 @@
             $num_B = $_POST["num_B"];
             $num_C = $_POST["num_C"];
 
-            for($i = $num_A; $i <= $num_B; $i++){
-                if($i % $num_C == 0){
-                    $multiplos [] = $i;
-                }
-            }
+            
             echo "Los multiplos de $num_C entre $num_A y $num_B son ";
             echo "<ul>";
-            foreach($multiplos as $multiplo){
-                echo "<li>$multiplo</li>";
+            for($i = $num_A; $i <= $num_B; $i++){
+                if($i % $num_C == 0){
+                    echo "<li>$i</li>";                
+                }
             }
             echo "</ul>";
         }
