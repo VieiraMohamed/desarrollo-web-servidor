@@ -57,7 +57,7 @@
                 $resultado = $iva47+$iva45+$iva37+$iva30+$iva24+$iva19;
             }
             $resultado = $sueldo -$resultado;
-            echo "<p>Cobras $sueldo y hacienda después de robarte que queda: $resultado</p>";
+            echo "<p>Cobras $sueldo y hacienda después de robarte te queda: $resultado</p>";
         }
         
     ?>

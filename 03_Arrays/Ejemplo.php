@@ -14,7 +14,7 @@
 <body>
     <?php
         /* 
-        todos los arraus en php son asociativos,como los map
+        todos los arrays en php son asociativos,como los map
         de java
         tienen pares clave-valor
         */
