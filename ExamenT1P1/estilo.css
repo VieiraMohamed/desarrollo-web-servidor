@@ -1,0 +1,10 @@
+table{
+    border: 2px solid rgb(141, 46, 141);
+    border-collapse: collapse;
+   
+}
+th, td, tr{
+    border: 2px solid black;
+    text-align: center;
+}
+

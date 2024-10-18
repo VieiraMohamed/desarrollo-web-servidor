@@ -95,7 +95,7 @@
         $total *= $contador;
         $contador++;
        }
-       echo "<p>El factorial de 6 es: $total</p>"
+       
 
      ?>
 

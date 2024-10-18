@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Iva get</title>
+    <?php
+        error_reporting( E_ALL );
+        ini_set( "display_errors", 1 );    
+    ?>
 </head>
 <body>
     <!-- 
@@ -13,9 +17,9 @@
     10 iva = general pvp 12,1
     10 iva = reducido pvp 11
     -->
-    <form action="" method="post">
+    <form action="" method="get">
         <label for="precio">Precio</label>
-        <input type="text" name="Precio">
+        <input type="text" name="precio">
         <br>
         <select name="iva" id="iva">
             <option value="General">General</option>
@@ -27,9 +31,13 @@
     </form>
 
     <?php
-        if($_SERVER["REQUEST_METHOD"] == "POST"){
-            $precio = $_POST["Precio"];
-            $iva = $_POST["iva"];
+    // isset (is set ) devuelve true si la variable existe
+        if(isset($_GET["precio"]) and isset($_GET["iva"])){
+            $precio = $_GET["precio"];
+            $iva = $_GET["iva"];
+
+            //var_dump($precio);
+            //var_dump($iva);
 
             if($precio !="" and $iva != ""){
                 $pvp = match ($iva) {
@@ -41,7 +49,11 @@
             }else{
                 echo "<h3> Te faltan datos</h3>";
             }
-        }
+            
+            
+            };
+            
+        
     ?>
 </body>
 </html>
