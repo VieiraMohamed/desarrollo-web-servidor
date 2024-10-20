@@ -28,14 +28,20 @@
             $numero2 = $_POST["numero2"];
             $numero3 = $_POST["numero3"];
 
-            $mayor = $numero1;
-            if($numero2 > $mayor){
-                $mayor = $numero2;
+            if($numero1 != "" && $numero2 !="" && $numero3 !=""){
+
+            
+                $mayor = $numero1;
+                if($numero2 > $mayor){
+                    $mayor = $numero2;
+                }
+                if($numero3 > $mayor){
+                    $mayor = $numero3;
+                }
+                echo "<p>El numero mayor es $mayor </p>";
+            }else{
+                echo "<h3>Faltan datos</h3>";
             }
-            if($numero3 > $mayor){
-                $mayor = $numero3;
-            }
-            echo "<p>El numero mayor es $mayor </p>";
         }
     ?>
 </body>
