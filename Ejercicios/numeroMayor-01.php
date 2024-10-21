@@ -9,7 +9,7 @@
     <h1>Ejercicio 1</h1>
     <!-- EJERCICIO 1: Realiza un formulario que reciba 3 números y devuelva el mayor de ellos. -->
     
-    <form action="" method="post">
+    <form action="" method="get">
         <label for="numero1">Número 1</label>
         <input type="text" name="numero1">
         <br>
@@ -23,10 +23,10 @@
     </form>
 
     <?php
-        if($_SERVER["REQUEST_METHOD"] == "POST"){
-            $numero1 = $_POST["numero1"];
-            $numero2 = $_POST["numero2"];
-            $numero3 = $_POST["numero3"];
+        if(isset($_GET["numero1"]) and isset($_GET["numero2"]) and isset($_GET["numero3"])){
+            $numero1 = $_GET["numero1"];
+            $numero2 = $_GET["numero2"];
+            $numero3 = $_GET["numero3"];
 
             if($numero1 != "" && $numero2 !="" && $numero3 !=""){
 

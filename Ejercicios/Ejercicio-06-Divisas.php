@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>Conversor de divisas</h1>
-    <form action="" method="post">
+    <form action="" method="get">
         <label for="moneda" name="moneda"></label>
         <input type="text" name="moneda">
         <select name="origen" id="origen">
@@ -25,10 +25,10 @@
     </form>
 
     <?php
-        if($_SERVER["REQUEST_METHOD"] == "POST"){
-            $moneda = $_POST["moneda"];
-            $origen = $_POST["origen"];
-            $destino = $_POST["destino"];
+        if(isset($_GET["moneda"]) and isset($_GET["origen"]) and isset($_GET["destino"])){
+            $moneda = $_GET["moneda"];
+            $origen = $_GET["origen"];
+            $destino = $_GET["destino"];
             $resultado = 0;
             if($origen != "" && $moneda !="" && $destino !=""){
 
