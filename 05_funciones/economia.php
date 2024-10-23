@@ -4,7 +4,7 @@ define("general", 1.21);
 define("reducido", 1.10);
 define("superreducido", 1.04);
 
-function calcularPvp(){
+function calcularPvp($precio,$iva){
     $pvp = match ($iva) {
         "general" => $precio * general,
         "reducido" => $precio * reducido,
