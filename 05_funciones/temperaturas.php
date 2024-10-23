@@ -8,7 +8,7 @@
         $origen = $unidadInicial;
         $destino = $unidadFinal;
         $resultado = 0;
-        if($temp !=""){
+        
 
             
             // Conversión de Celsius
@@ -37,9 +37,7 @@
             }
     
             echo "<p>$temp $origen son $resultado $destino</p>";
-        }else{
-            echo "<h3>Faltan datos</h3>";
-        }
+        
     }
     
 

@@ -43,8 +43,34 @@
                 $temp = $_POST["temp"];
                 $origen = $_POST["origen"];
                 $destino = $_POST["destino"];
-                convertirTemperatura($temp,$origen,$destino);
+                
+                if($temp !=""){
+                    if(is_numeric($temp)){
+                        if($origen == "celsius" and $temp >= -273.15){
+                            echo convertirTemperatura($temp,$origen,$destino);
+                        }elseif($origen == "celsius" and $temp < -273.15){
+                            echo "<p>La temperatura no puede ser inferior a -273.15 celsius</p>";
+                        }
+
+                        if($origen == "kelvin" and $temp >= 0){
+                            echo convertirTemperatura($temp,$origen,$destino);
+                        }elseif($origen == "kelvin" and $temp < 0){
+                            echo "<p>La temperatura no puede ser inferior a 0 kelvin</p>";
+                        }
+
+                        if($origen == "fahrenheit" and $temp >= -249.67){
+                            echo convertirTemperatura($temp,$origen,$destino);
+                        }elseif($origen == "fahrenheit" and $temp < -249.67){
+                            echo "<p>La temperatura no puede ser inferior a -249.67 fahrenheit</p>";
+                        }
+                    }else{
+                        echo "<p>La temperatura debe ser un numero</p>";
+                    }
+                }else{
+                    echo "<p>Falta la temperatura</p>";
+                }
             }
+            
         }
     ?>
 

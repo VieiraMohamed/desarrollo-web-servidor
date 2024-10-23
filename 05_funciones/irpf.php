@@ -1,6 +1,6 @@
 <?php
     function calcularIrpf($sueldo){
-        if($sueldo !="" ){
+        
             $resultado = 0;
 
             if($sueldo <= 12450){
@@ -42,12 +42,7 @@
                 $iva47 = (($sueldo-299999)*0.47);
                 $resultado = $iva47+$iva45+$iva37+$iva30+$iva24+$iva19;
             }
-            $resultado = $sueldo -$resultado;
-            echo "<p>Cobras $sueldo y hacienda después de robarte te queda: $resultado</p>";
-        }
-        else{
-            echo "<p>Faltan datos</p>";
-        }
+            return $resultado = $sueldo -$resultado;
         
     }
 ?>

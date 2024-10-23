@@ -29,9 +29,65 @@
     <?php
         if($_SERVER["REQUEST_METHOD"] == "POST"){
             if($_POST["action"] == "formulario_exponente"){
-                $base = $_POST["base"];
-                $exponente = $_POST["exponente"];
-                calcularExponente($base,$exponente);
+                $tmp_base = $_POST["base"];
+                $tmp_exponente = $_POST["exponente"];
+
+                /* if($tmp_base !=""){
+                    if(filter_var($tmp_base,FILTER_VALIDATE_INT) !== FALSE){
+                        $base = $tmp_base;
+                    }else{
+                        echo "<p>La base debe ser un número</p>";
+                    }
+                }else{
+                    echo "<p>La base es obligatoria</p>";
+                } */
+
+                //version alternativa
+                if($tmp_base == ""){
+                    echo "<p>La base es obligatoria</p>";
+                }else{
+                    if(filter_var($tmp_base,FILTER_VALIDATE_INT) === FALSE){
+                        echo "<p>La base debe ser un número</p>";
+                    }else{
+                        $base = $tmp_base;
+                    }
+                }
+
+                /* if($tmp_exponente !=""){
+                    if(filter_var($tmp_exponente,FILTER_VALIDATE_INT) !== FALSE){
+                        if($tmp_exponente >= 0){
+                            $exponente = $tmp_exponente;
+                        }else{
+                            echo "<p>El exponente debe ser igual o mayor a cero</p>";
+                        }
+                    }else{
+                        echo "<p>La exponente debe ser un número</p>";
+                    }
+                }else{
+                    echo "<p>La exponente es obligatoria</p>";
+                }
+ */
+
+                //version alternativa
+                if($tmp_exponente == ""){
+                    echo "<p>El exponente es obligatorio</p>";
+                }else{
+                    if(filter_var($tmp_exponente,FILTER_VALIDATE_INT) === FALSE){
+                        echo "<p>El exponente debe ser un número</p>";
+                    }else{
+                        if($tmp_exponente < 0){
+                            echo "<p>El exponente debe ser mayor o igual a cero</p>";
+                        }else{
+                            $exponente = $tmp_exponente;
+                        }
+                    }
+                }
+
+
+                if(isset($base) && isset($exponente)){
+                    $resultado = calcularExponente($base,$exponente);
+                    echo "<h1>El resultado es $resultado</h1>";
+                }
             }
         }
     ?>
@@ -46,9 +102,27 @@
     <?php
         if($_SERVER["REQUEST_METHOD"] == "POST"){
             if($_POST["action"] == "formulario_irpf"){
-                $sueldo = $_POST["sueldo"];
-                $resultado = 0;
-                calcularIrpf($sueldo);
+                $tmp_sueldo = $_POST["sueldo"];
+                $resultado = "";
+
+                if($tmp_sueldo ==""){
+                    echo "<p>El sueldo es obligatorio</p>";
+                }else{
+                    if(filter_var($tmp_sueldo,FILTER_VALIDATE_FLOAT) === FALSE){
+                        echo "<p>El sueldo debe ser un número</p>";
+                    }else{
+                        if($tmp_sueldo < 0){
+                            echo "<p>El sueldo debe ser mayor o igual a cero</p>";
+                        }else{
+                            $sueldo = $tmp_sueldo;
+                        }
+                    }
+                }
+                if(isset($sueldo)){
+                    $resultado = calcularIrpf($sueldo);
+                    echo "<h1>Tu sueldo es: $sueldo y después de robarte hacienda te queda $resultado </h1>";
+                }
+                
             }
         }
     ?>
@@ -70,7 +144,12 @@
             if($_POST["action"] == "formulario_primos"){
                 $num = $_POST["num"];
                 $num2 = $_POST["num2"];
-                calcularPrimos($num,$num2);
+                
+                if($num !="" && $num2 !=""){
+                    calcularPrimos($num,$num2);
+                }else{
+                    echo "<p>Faltan datos</p>";
+                }
             }
         }
     ?>
@@ -98,8 +177,13 @@
                 if($_SERVER["REQUEST_METHOD"] == "POST"){
                     if($_POST["action"] == "formulario_tabla"){
                         $numero = $_POST["numero"];
-                        calcularTabla($numero);
+                        if($numero !=""){
+                            calcularTabla($numero);
+                        }else{
+                            echo "<p>Faltan datos</p>";
+                        }
                     }
+                    
                 }
             ?>
         </tbody>
