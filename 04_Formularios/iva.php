@@ -10,6 +10,12 @@
         
         require('../05_funciones/economia.php');//esto es para importar
     ?>
+    <style>
+        .error{
+            color:red;
+            font-style: italic;
+        }
+    </style>
 </head>
 <body>
     <!-- 
@@ -19,32 +25,27 @@
     10 iva = general pvp 12,1
     10 iva = reducido pvp 11
     -->
-    <form action="" method="post">
-        <label for="precio">Precio</label>
-        <input type="text" name="Precio">
-        <br>
-        <select name="iva" id="iva">
-            <option value="general">General</option>
-            <option value="reducido">Reducido</option>
-            <option value="superreducido">Superreducido</option>
-        </select>
-        <br>
-        <input type="submit" value="Calcular">
-    </form>
+    
 
     <?php
         if($_SERVER["REQUEST_METHOD"] == "POST"){
+            if(isset($_POST["iva"])){
+                $tmp_iva = $_POST["iva"];
+            }
+            else{
+                $tmp_iva ="";
+            }
             $tmp_precio = $_POST["Precio"];
-            $tmp_iva = $_POST["iva"];
+            
 
             if($tmp_precio == ""){
-                echo "<p>El precio es obligatorio</p>";
+                $err_precio="El precio es obligatorio";
             }else{
                 if(filter_var($tmp_precio,FILTER_VALIDATE_FLOAT) === FALSE){
-                    echo "<p>El precio debe ser un número</p>";
+                    $err_precio="El precio debe ser un número";
                 }else{
                     if($tmp_precio < 0){
-                        echo "<p>El precio debe ser mayor o igual a cero</p>";
+                        $err_precio="El precio debe ser mayor o igual a cero";
                     }else{
                         $precio = $tmp_precio;
                     }
@@ -52,18 +53,37 @@
             }
 
             if($tmp_iva == ""){
-                echo "<p>El IVA es obligatorio</p>";
+                $err_iva= "El IVA es obligatorio";
             }else{
                 $valores_validos_iva = ["general","reducido","superreducido"];
                 if(!in_array($tmp_iva,$valores_validos_iva)){
-                    echo "<p>El IVA solo puede ser: GENERAL, REDUCIDO, SUPERREDUCIDO</p>";
+                    $err_iva= "El IVA solo puede ser: GENERAL, REDUCIDO, SUPERREDUCIDO";
                 }else{
                     $iva = $tmp_iva;
                 }
             }
-            if(isset($precio) && isset($iva)){              
-                echo calcularPvp($precio,$iva);
-            }
+            
+        }
+    ?>
+    <form action="" method="post">
+        <label for="precio">Precio</label>
+        <input type="text" name="Precio">
+        <?php if(isset($err_precio)) echo "<span class='error'>$err_precio</span>"; ?>
+        <br>
+        <select name="iva" id="iva">
+            <option disabled selected hidden>--Seleciona el IVA--</option>
+            <option value="general">General</option>
+            <option value="reducido">Reducido</option>
+            <option value="superreducido">Superreducido</option>
+        </select>
+        <?php if(isset($err_iva)) echo "<span class='error'>$err_iva</span>"; ?>
+        <br>
+        <input type="submit" value="Calcular">
+    </form>
+        
+    <?php
+        if(isset($precio) && isset($iva)){              
+            echo "<h1>El PVP es ".calcularPvp($precio,$iva)."</h1>";
         }
     ?>
 </body>
