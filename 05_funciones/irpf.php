@@ -1,5 +1,5 @@
 <?php
-    function calcularIrpf($sueldo){
+    function calcularIrpf(int|float $sueldo) : float{
         
             $resultado = 0;
 

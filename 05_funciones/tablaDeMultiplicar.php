@@ -1,5 +1,5 @@
 <?php
-    function calcularTabla($numero){
+    function calcularTabla(int $numero) :int{
         $count = 1;
         $resultado="";
         

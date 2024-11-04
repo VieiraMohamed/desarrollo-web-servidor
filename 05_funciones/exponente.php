@@ -1,5 +1,5 @@
 <?php
-    function calcularExponente($base,$exponente){
+    function calcularExponente(int $base,int $exponente) : int{
         
         $total = 1;
         for($i = 0;$i < $exponente; $i++){

@@ -3,7 +3,7 @@
     //inicial y la final, y devuelva la temperatura final
 
 
-    function convertirTemperatura($temperaturaInicial,$unidadInicial,$unidadFinal){
+    function convertirTemperatura(int|float $temperaturaInicial,int|float $unidadInicial,int|float $unidadFinal) : float{
         $temp = $temperaturaInicial;
         $origen = $unidadInicial;
         $destino = $unidadFinal;

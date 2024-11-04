@@ -29,17 +29,24 @@
         function formatearNombre($nombre) { 
             return ucwords(strtolower($nombre)); 
         }
+        function depurar(string $entrada) : string{
+            $salida= htmlspecialchars($entrada);
+            $salida = trim($salida);
+            $salida = stripslashes($salida);
+            $salida = preg_replace('!\s+', ' ', $salida);
+            return $salida;
+        }
     ?>
 
     <?php
         if($_SERVER["REQUEST_METHOD"] == "POST"){
-            $tmp_usuario = $_POST["usuario"];
-            $tmp_nombre = $_POST["nombre"];
-            $tmp_apellidos=$_POST["apellidos"];
-            $tmp_apellidos2=$_POST["apellidos2"];
-            $tmp_dni = $_POST["dni"];
-            $tmp_fecha =$_POST["fecha"];
-            $tmp_correo = $_POST["correo"];
+            $tmp_usuario = depurar($_POST["usuario"]);
+            $tmp_nombre = depurar( $_POST["nombre"]);
+            $tmp_apellidos= repurar($_POST["apellidos"]);
+            $tmp_apellidos2= depurar($_POST["apellidos2"]);
+            $tmp_dni = depurar($_POST["dni"]);
+            $tmp_fecha = depurar($_POST["fecha"]);
+            $tmp_correo = depurar($_POST["correo"]);
 
             if($tmp_usuario ==''){
                 $err_usuario="El usuario es obligatorio";
@@ -142,7 +149,7 @@
                         $err_fecha = "La fecha solo puede tener días = 2 números y no mayor a 31, mes = 2 números y no mayor a 12, año = 4 números";
                     } else {
                         $fecha_de_hoy = date('Y m d'); // obtengo el formato año mes dia
-                        $fecha_array = explode(' ', $fecha_de_hoy);
+                        $fecha_array = explode(' ', $fecha_de_hoy);//explode es como el split
                         $tmp_fecha = explode('-', $tmp_fecha);
                         if (($fecha_array[0] - $tmp_fecha[0]) > 18) {
                             echo "<p>Eres mayor de edad</p>";

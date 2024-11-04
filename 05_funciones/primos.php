@@ -1,5 +1,5 @@
 <?php
-    function calcularPrimos($num,$num2){
+    function calcularPrimos(int $num,int $num2) :int{
         
 
             

@@ -1,5 +1,5 @@
 <?php
-    function  comprobarEdades($nombre,$edad){
+    function  comprobarEdades(string $nombre,int $edad) : int{
         
         if($edad < 18){
             echo "<p>$nombre</p>";

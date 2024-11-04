@@ -4,7 +4,7 @@ define("general", 1.21);
 define("reducido", 1.10);
 define("superreducido", 1.04);
 
-function calcularPvp($precio,$iva){
+function calcularPvp( int|float $precio, string $iva) : float{
     $pvp = match ($iva) {
         "general" => $precio * general,
         "reducido" => $precio * reducido,
@@ -16,7 +16,7 @@ function calcularPvp($precio,$iva){
 
 
 
-function calcularIrpf($sueldo){
+function calcularIrpf(int|float $sueldo) : float{
         
     $resultado = 0;
 
