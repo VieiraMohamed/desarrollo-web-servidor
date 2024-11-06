@@ -9,6 +9,9 @@
         .error{
             color:red;
         }
+        *{
+            margin-left:5px;
+        }
     </style>
     <?php
         error_reporting( E_ALL );
@@ -59,21 +62,33 @@
             if($tmp_consola == ''){
                 $err_consola= "<p>Debes elegir una consola</p>";
             }else{
-                $consola = $tmp_consola;
+                $consolas_validas = ["PS4","PS5","Nintendo Switch","Xbox Series S/X"];
+                if(!in_array($tmp_consola,$consolas_validas)){//para comprobar el $consola esta dentro del array $consolas_validas
+                    $err_consola= "<p>La consola no es válida</p>";
+                }else{
+                    $consola = $tmp_consola;
+                }               
             }
 
-            // Validar la fecha de lanzamiento (1 de enero de 1947 hasta 5 años en el futuro)
-            $min_date = '1947-01-01'; // Fecha mínima: 1 de enero de 1947
-            $max_date = date('Y-m-d', strtotime('+5 years')); // Fecha máxima: 5 años a partir de la fecha actual
+            
+            $min_date = '1947-01-01'; 
+            $max_date = date('Y-m-d', strtotime('+5 years')); 
 
-            // Validación de la fecha
+            // validar la fecha
             if ($tmp_fecha == '') {
                 $err_fecha = "<p>La fecha de lanzamiento es obligatoria</p>";
-            } elseif ($tmp_fecha < $min_date || $tmp_fecha > $max_date) {
-                $err_fecha = "<p>La fecha de lanzamiento debe estar entre el 1 de enero de 1947 y 5 años a partir de hoy</p>";
-            } else {
-                $fecha = $tmp_fecha;
-            }
+            }else{
+                $patron = "/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/";
+                    if (!preg_match($patron, $tmp_fecha)) {
+                        $err_fecha = "<p>Formato de fecha incorrecto</p>";
+                    }else{
+                        if ($tmp_fecha < $min_date || $tmp_fecha > $max_date) {
+                            $err_fecha = "<p>La fecha de lanzamiento debe estar entre el 1 de enero de 1947 y 5 años a partir de hoy</p>";
+                        } else {
+                            $fecha = $tmp_fecha;
+                        }
+                    }
+            } 
 
             if($tmp_pegi==''){
                 $err_pegi="<p>Debes elegir una calificación de edad</p>";
@@ -93,21 +108,19 @@
             <?php if(isset($err_juego)) echo "<span class='error'>$err_juego</span>" ?>
         </div>
         <div>
-            <label>
-                <input type="radio" name="consola" value="Nintendo Switch"> Nintendo Switch
-            </label>
+            <input  type="radio" name="consola" value="Nintendo Switch"> 
+            <label class="form-label">Nintendo Switch</label>
             <br>
-            <label>
-                <input type="radio" name="consola" value="PS5"> PS5
-            </label>
+            <input type="radio" name="consola" value="PS5"> 
+            <label class="form-label">PS5</label>
             <br>
-            <label>
-                <input type="radio" name="consola" value="PS4"> PS4
-            </label>
+            <input type="radio" name="consola" value="PS4"> 
+            <label class="form-label">PS4</label>
             <br>
-            <label>
-                <input type="radio" name="consola" value="Xbox Series S/X"> Xbox Series S/X
-            </label>
+            <input type="radio" name="consola" value="Xbox Series S/X"> 
+            <label >PS4</label>
+            <label >PS4</label>
+            <label class="form-label">Xbox Series S/X</label>
             <?php if(isset($err_consola)) echo "<span class='error'>$err_consola</span>" ?>
         </div>
         <br><br>
@@ -131,7 +144,7 @@
         <br><br>
         <textarea name="descripcion" id="descripcion" rows="4" cols="50" maxlength="255"></textarea>
         <br>
-        <input type="submit" value="Enviar">
+        <input class="btn btn-primary" type="submit" value="Enviar">
      </form>
      <?php
             if (isset($juego) && isset($consola) && isset($fecha) && isset($pegi)) {
