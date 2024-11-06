@@ -44,9 +44,9 @@
     <?php
         if($_SERVER ["REQUEST_METHOD"] == "POST"){
             $tmp_nombre = $_POST["nombre"];
-            $tmp_inicial = $POST["inicial"];
-            $tmp_liga = (isser($_POST["liga"]) ? $_POST["liga"] : '');//(isset($_POST["consola"]) ? $_POST["consola"] : '');
-            $tmp_fem = (isset($_POST["fem"]) ? $_POST["liga"] : '');
+            $tmp_inicial = $_POST["inicial"];
+            $tmp_liga = (isset($_POST["liga"]) ? $_POST["liga"] : '');//(isset($_POST["consola"]) ? $_POST["consola"] : '');
+            $tmp_fem = (isset($_POST["fem"]) ? $_POST["fem"] : '');
             $tmp_ciudad= $_POST["ciudad"];
             $tmp_fecha = $_POST["fecha"];
             $tmp_numero = $_POST["numero"];
@@ -62,9 +62,7 @@
                     if (!preg_match($patron, $tmp_nombre)){
                         $err_nombre= "El nombre no puede tener caracteres extraños";
                     }else{
-                        if(!isset($err_nombre)){
-                            $nombre = $tmp_nombre;
-                        }
+                        $nombre = $tmp_nombre;
                     }
                 }
             }
@@ -79,9 +77,7 @@
                     if (!preg_match($patron, $tmp_inicial)){
                         $err_inicial= "Las iniciales solo puede contener letras";
                     }else{
-                        if(!isset($err_inicial)){
                         $inicial = $tmp_inicial;
-                        }
                     }
                 }
             }
@@ -89,7 +85,7 @@
             if($tmp_liga == ''){
                 $err_liga = "La liga es obligatoria";
             }else{
-                $ligas_validas = ["EA","hyper","RFEF"];
+                $ligas_validas = ["Liga EA Sports","Liga Hypermotion","Liga Primera RFEF"];
                 if(!in_array($tmp_liga,$ligas_validas)){
                     $err_liga = "La liga no es valida";
                 }else{
@@ -100,7 +96,7 @@
             if($tmp_fem == ''){
                 $err_fem= "Es obligatio poner si es femenina o masculina";
             }else{
-                $respuestas_validas = ["Si","No"];
+                $respuestas_validas = ["si","no"];
                 if(!in_array($tmp_fem,$respuestas_validas)){
                     $err_fem = "La respuesta no es correcta";
                 }else{
@@ -118,9 +114,7 @@
                     if (!preg_match($patron, $tmp_ciudad)){
                         $err_ciudad = "La ciudad no puede contener caracteres extraños";
                     }else{
-                        if(!isset($err_ciudad)){
-                            $ciudad = $tmp_ciudad;
-                        }
+                        $ciudad = $tmp_ciudad;
                     }
                 }
             }
@@ -135,7 +129,7 @@
                         $err_fecha = "<p>Formato de fecha incorrecta</p>";
                     }else{
                         if ($tmp_fecha < $min_date || $tmp_fecha > $max_date) {
-                            $err_fecha = "<p>La fecha de lanzamiento debe estar entre el 18 de diciembre de 1889 y el dia de hoy</p>";
+                            $err_fecha = "<p>La fecha de fundación debe estar entre el 18 de diciembre de 1889 y el dia de hoy</p>";
                         } else {
                             $fecha = $tmp_fecha;
                         }
@@ -148,6 +142,13 @@
             }else{
                 if($tmp_numero < 19 || $tmp_numero > 32){
                     $err_numero = "El número de jugadores no puede ser menor a 19 ni mayor a 32";
+                }else{
+                    $patron = "/^\d+$/";
+                    if (!preg_match($patron, $tmp_numero)) {
+                        $err_numero = "<p>Solo se pueden ingresar números</p>";
+                    }  else{
+                        $numero = $tmp_numero;
+                    } 
                 }
             }
 
@@ -172,9 +173,9 @@
         <div>
             <label for="">Liga</label>
                 <select name="liga">
-                    <option value="EA">Liga EA Sports</option>
-                    <option value="hyper">Liga Hypermotion</option>
-                    <option value="RFEF">Liga Primera RFEF</option>
+                    <option value="Liga EA Sports">Liga EA Sports</option>
+                    <option value="Liga Hypermotion">Liga Hypermotion</option>
+                    <option value="Liga Primera RFEF">Liga Primera RFEF</option>
                     <?php if(isset($err_liga)) echo "<span class='error'>$err_liga</span>" ?>
                 </select>
             </div>
@@ -205,6 +206,18 @@
         </div>
         <input class="btn btn-primary" type="submit" value="Enviar">
      </form>
+     <?php
+            if (isset($nombre) && isset($inicial) && isset($liga) && isset($fem) && isset($ciudad)&& isset($fecha)&& isset($numero)) {
+                echo "<h2>Datos del equipo</h2>"; 
+                echo "<p>Nombre: $nombre</p>"; 
+                echo "<p>Iniciales: $inicial</p>"; 
+                echo "<p>Liga: $liga</p>"; 
+                echo "<p>Tipo de liga: $fem</p>"; 
+                echo "<p>Ciudad: $ciudad</p>";
+                echo "<p>Fecha de fundación: $fecha</p>";
+                echo "<p>Número de jugadores: $numero</p>";
+            }
+        ?>
      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
 </body>
