@@ -23,7 +23,7 @@
         if($_SERVER["REQUEST_METHOD"] == "POST"){
             $numero = $_POST["numero"];
             $opcion = $_POST["opcion"];
-            $resultado = 1;
+            $resultado = 0;
             $contador = 1;
             $total = 1;
             if($opcion == "sumatorio"){
