@@ -29,16 +29,23 @@
         function formatearNombre($nombre) { 
             return ucwords(strtolower($nombre)); 
         }
+        function depurar(string $entrada) : string{
+            $salida= htmlspecialchars($entrada);
+            $salida = trim($salida);
+            $salida = stripslashes($salida);
+            $salida = preg_replace('!\s+', ' ', $salida);
+            return $salida;
+        }
     ?>
 
     <?php
         if($_SERVER["REQUEST_METHOD"] == "POST"){
             $tmp_usuario = $_POST["usuario"];
-            $tmp_nombre = $_POST["nombre"];
-            $tmp_apellidos=$_POST["apellidos"];
-            $tmp_apellidos2=$_POST["apellidos2"];
+            $tmp_nombre =$_POST["nombre"];
+            $tmp_apellidos= $_POST["apellidos"];
+            $tmp_apellidos2= $_POST["apellidos2"];
             $tmp_dni = $_POST["dni"];
-            $tmp_fecha =$_POST["fecha"];
+            $tmp_fecha = $_POST["fecha"];
             $tmp_correo = $_POST["correo"];
 
             if($tmp_usuario ==''){
@@ -109,13 +116,20 @@
             if($tmp_dni == '') {
                 $err_dni = "El DNI es obligatorio";
             } else {
+                $tmp_dni = strtoupper($tmp_dni);
                 $patron = "/^[0-9]{8}[A-Za-z]$/";
                 if(!preg_match($patron, $tmp_dni)) {
                     $err_dni = "El DNI solo puede contener 8 números y una letra";
                 } else {
-                    $numero_dni = substr($tmp_dni, 0, -1);
-                    $letra_dni = strtoupper(substr($tmp_dni, -1));
-                    $letra_correcta = calcularLetraDNI($tmp_dni);
+                    //$numero_dni = substr($tmp_dni, 0, -1);
+                    //$letra_dni = strtoupper(substr($tmp_dni, -1));
+                    //$letra_correcta = calcularLetraDNI($tmp_dni);
+                   // $letra_dni=substr($tmp_dni,8,1);
+                    $letras = "TRWAGMYFPDXBNJZSQVHLCKE"; 
+                    $numero = substr($tmp_dni, 0, 8);
+                    $letra_dni= substr($tmp_dni,-1);
+                    $indice=$numero % 23; 
+                    $letra_correcta = $letras[$indice];
                     if ($letra_dni !== $letra_correcta) {
                         $err_dni = "La letra del DNI no es correcta. La letra correcta es $letra_correcta.";
                     } else {
@@ -124,24 +138,68 @@
                 }
             }
 
+
+           /*  $fecha_de_hoy= date('Y m d');// obtengo el formato año mes dia
+            $fecha_array=explode(' ',$fecha_de_hoy);
+            echo "<p>$fecha_de_hoy</p>"; */
+
             if ($tmp_fecha == '') {
                 $err_fecha = "La fecha es obligatoria";
             } else {
                 if (strlen($tmp_fecha) != 10) {
                     $err_fecha = "La fecha solo puede tener el formato dd/mm/yyyy";
                 } else {
-                    $patron = "/^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/";
+                    $patron = "/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/";
                     if (!preg_match($patron, $tmp_fecha)) {
                         $err_fecha = "La fecha solo puede tener días = 2 números y no mayor a 31, mes = 2 números y no mayor a 12, año = 4 números";
                     } else {
+                        $fecha_de_hoy = date('Y m d'); // obtengo el formato año mes dia
+                        $fecha_array = explode(' ', $fecha_de_hoy);//explode es como el split
+                        $tmp_fecha = explode('-', $tmp_fecha);
+                        if (($fecha_array[0] - $tmp_fecha[0]) > 18) {
+                            echo "<p>Eres mayor de edad</p>";
+                        } elseif (($fecha_array[0] - $tmp_fecha[0]) == 18) {
+                            if ($fecha_array[1] > $tmp_fecha[1]) {
+                                echo "<p>Eres mayor de edad</p>";
+                            } elseif ($fecha_array[1] == $tmp_fecha[1]) {
+                                if ($fecha_array[2] >= $tmp_fecha[2]) {
+                                    echo "<p>Eres mayor de edad</p>";
+                                } else {
+                                    echo "<p>No eres mayor de edad</p>";
+                                }
+                            } else {
+                                echo "<p>No eres mayor de edad</p>";
+                            }
+                        } else {
+                            echo "<p>No eres mayor de edad</p>";
+                        }
+                    }
+                }
+            }
+            
+            /* if ($tmp_fecha == '') {
+                $err_fecha = "La fecha es obligatoria";
+            } else {
+                /* if (strlen($tmp_fecha) != 10) {
+                    $err_fecha = "La fecha solo puede tener el formato dd/mm/yyyy";
+                } else { */
+                    /* $patron = "/^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/";
+                    if (!preg_match($patron, $tmp_fecha)) {
+                        $err_fecha = "La fecha solo puede tener días = 2 números y no mayor a 31, mes = 2 números y no mayor a 12, año = 4 números";
+                    } else { */
                         // convierto la fecha de nacimiento a un objeto datatime
-                        $fecha = DateTime::createFromFormat('d/m/Y', $tmp_fecha);
+                        /* $fecha = DateTime::createFromFormat('d/m/Y', $tmp_fecha);
                         $fecha_actual = new DateTime();
             
                         // calculo la edad
                         $edad = $fecha_actual->diff($fecha)->y;
+                        $comprobar_fecha=explode("-",$tmp_fecha);
+                        $edad=$comprobar_fecha[0];
+                        if( $fecha_array[0] - $edad[0] >=18){
+                            echo "<p>Eres mayor de edad</p>";
+                        }
             
-                        // compruebo si la persona es menor de 18 años
+                        // compruebo si la persona es menor de 18 años 
                         if ($edad < 18) {
                             $err_fecha = "Debes ser mayor de 18 años.";
                         } else {
@@ -150,7 +208,7 @@
                         }
                     }
                 }
-            }
+            } */
 
             if ($tmp_correo == '') {
                 $err_correo = "El correo es obligatorio";
@@ -167,7 +225,7 @@
                         foreach ($palabras_malsonantes as $palabra) {
                             if (str_contains($tmp_correo, $palabra)) {
                                 $err_correo = "El correo no puede contener palabras malsonantes.";
-                                break; //si se encuentra una palabra malsonante salgo
+                                break; //si se encuentra una palabra malsonante salgo del bucle
                             }
                         }
                         if (!isset($err_correo)) {
@@ -177,15 +235,7 @@
                 }
             }
 
-            if (!isset($err_nombre) && !isset($err_apellidos) && !isset($err_apellidos2) && !isset($err_dni) && !isset($err_fecha) && !isset($err_correo)) {
-                 echo "<h2>Datos del Usuario</h2>"; 
-                 echo "<p>Nombre: $nombre</p>"; 
-                 echo "<p>Primer Apellido: $apellidos</p>"; 
-                 echo "<p>Segundo Apellido: $apellidos2</p>"; 
-                 echo "<p>DNI: $dni</p>"; 
-                 echo "<p>Fecha de nacimiento: $fecha</p>"; 
-                 echo "<p>Correo Electrónico: $correo</p>"; 
-            }
+            
         }
     ?>
     <h1>Formulario Usuario</h1>
@@ -221,7 +271,7 @@
         </div>
         <div class="mb-3">
             <label class="form-label">Fecha de nacimiento</label>
-            <input type="text" class="form-control" name="fecha">
+            <input type="date" class="form-control" name="fecha">
             <?php if(isset($err_fecha)) echo "<span class='error'>$err_fecha</span>" ?>
         </div>
         <div class="mb-3">
@@ -233,6 +283,17 @@
         <input class="btn btn-primary" type="submit" value="Enviar">
         </div>
     </form>
+        <?php
+            if (isset($nombre) && isset($apellidos) && isset($apellidos2) && isset($dni) && isset($fecha) && isset($correo)) {
+                echo "<h2>Datos del Usuario</h2>"; 
+                echo "<p>Nombre: $nombre</p>"; 
+                echo "<p>Primer Apellido: $apellidos</p>"; 
+                echo "<p>Segundo Apellido: $apellidos2</p>"; 
+                echo "<p>DNI: $dni</p>"; 
+                echo "<p>Fecha de nacimiento: $fecha</p>"; 
+                echo "<p>Correo Electrónico: $correo</p>"; 
+            }
+        ?>
     </div>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
