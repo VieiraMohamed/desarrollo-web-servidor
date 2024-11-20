@@ -54,6 +54,11 @@
                         echo "<td>". $fila["nombre_estudio"] ."</td>";
                         echo "<td>". $fila["anno_estreno"] ."</td>";
                         echo "<td>". $fila["num_temporadas"] ."</td>";
+                        ?>
+                        <td>
+                            <img width="200" height="200" src="<?php echo $fila["imagen"] ?>">
+                        </td>
+                        <?php
                         echo "</tr>";
                     }
                 ?>
