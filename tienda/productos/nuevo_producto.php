@@ -29,12 +29,12 @@
 
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Validación del nombre
-            $tmp_nombre = $_POST['nombre'] ?? "";
-            $tmp_precio = $_POST['precio'] ?? "";
-            $stock = $_POST['stock'] ?? 0;
-            $tmp_categoria = $_POST['categoria'] ?? "";
-            $tmp_descripcion = $_POST["descripcion"] ?? "";
-            $tmp_imagen = $_FILES["imagen"]["name"] ?? "";
+            $tmp_nombre = $_POST['nombre'];
+            $tmp_precio = $_POST['precio'];
+            $stock = $_POST['stock'] = 0;
+            $tmp_categoria = $_POST['categoria'];
+            $tmp_descripcion = $_POST["descripcion"];
+            $tmp_imagen = $_FILES["imagen"]["name"];
 
             if ($tmp_nombre == '') {
                 $err_nombre = "El nombre es obligatorio";
@@ -47,11 +47,14 @@
             // Validación del precio
             if ($tmp_precio == '') {
                 $err_precio = "El precio es obligatorio";
-            } elseif (!preg_match("/^[0-9]{1,4}(\.[0-9]{1,2})?$/", $tmp_precio)) {
-                $err_precio = "El precio debe ser un número válido con hasta 4 dígitos y 2 decimales";
-            } else {
-                $precio = $tmp_precio;
-            }
+            }else{
+                $patron = "/^[0-9]{1,4}(\.[0-9]{1,2})?$/";
+                if (!preg_match($patron, $tmp_precio)) {
+                    $err_precio = "El precio debe ser un número válido con hasta 4 dígitos y 2 decimales";
+                } else {
+                    $precio = $tmp_precio;
+                }
+            } 
 
             // Validación de la categoría
             if ($tmp_categoria == '') {

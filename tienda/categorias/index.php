@@ -19,7 +19,7 @@
             if($_SERVER["REQUEST_METHOD"] == "POST"){
                 $categoria = $_POST["categoria"];
                 //echo "<h1>$id</h1>";
-                //borrar anime
+
                 $sql = "DELETE FROM categorias WHERE categoria = '$categoria'";
                 $_conexion -> query($sql);
             }
