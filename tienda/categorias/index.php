@@ -17,10 +17,10 @@
         
         <?php 
             if($_SERVER["REQUEST_METHOD"] == "POST"){
-                $id = $_POST["id"];
+                $categoria = $_POST["categoria"];
                 //echo "<h1>$id</h1>";
                 //borrar anime
-                $sql = "DELETE FROM categorias WHERE id = $id";
+                $sql = "DELETE FROM categorias WHERE categoria = '$categoria'";
                 $_conexion -> query($sql);
             }
 
@@ -47,12 +47,12 @@
                     ?>
                         <td>
                             <form action="" method="post">
-                                <input type="hidden" name="id" value="<?php echo $fila["id"]?>">
+                                <input type="hidden" name="categoria" value="<?php echo $fila["categoria"]?>">
                                 <input class="btn btn-danger" type="submit" value="Borrar">
                             </form>
                         </td>
                         <td>
-                            <a class="btn btn-primary" href="editar_categoria.php?id=<?php echo $fila["id"]?>">Editar</a>
+                            <a class="btn btn-primary" href="editar_categoria.php?categoria=<?php echo $fila["categoria"]?>">Editar</a>
                         </td>   
                                            
                     <?php
