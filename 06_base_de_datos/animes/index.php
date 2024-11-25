@@ -10,6 +10,14 @@
         ini_set( "display_errors", 1 );
 
         require('conexion.php');
+
+        session_start();
+        if(isset($_SESSION["usuario"])){
+            echo "<h2>Bienvenid@".  $_SESSION["usuario"] . "</h2>";
+        }else{
+            header("location: usuario/iniciar_sesion.php");
+            exit;
+        }
     ?>
     <style>
         table{
@@ -24,6 +32,7 @@
 </head>
 <body>
     <div class="container">
+        <a class="btn btn-warning" href="usuario/cerrar_sesion.php">Cerrar sesión</a>
         <h1>Tabla de Animes</h1>
         <a class="btn btn-primary" href="./nuevo_anime.php">Crear Nuevo Anime</a>
         <?php

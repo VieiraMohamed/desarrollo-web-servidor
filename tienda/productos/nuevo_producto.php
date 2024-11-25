@@ -31,7 +31,7 @@
             // Validación del nombre
             $tmp_nombre = $_POST['nombre'];
             $tmp_precio = $_POST['precio'];
-            $stock = $_POST['stock'] = 0;
+            $stock = $_POST['stock'];
             $tmp_categoria = $_POST['categoria'];
             $tmp_descripcion = $_POST["descripcion"];
             $tmp_imagen = $_FILES["imagen"]["name"];
@@ -61,6 +61,10 @@
                 $err_categoria = "Debe seleccionar una categoría";
             } else {
                 $categoria = $tmp_categoria;
+            }
+
+            if($stock == ''){
+                $stock = 0;
             }
 
             // Validación de la descripción
