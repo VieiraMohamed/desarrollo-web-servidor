@@ -36,14 +36,14 @@
 
         <?php
         // Definir las variables de error
-        $err_nombre = $err_precio = $err_categoria = $err_descripcion = '';
+        $err_nombre = $err_precio = $err_categoria = $err_stock = $err_descripcion = '';
 
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Recuperamos los datos del formulario
             $tmp_nombre = $_POST["nombre"];
             $tmp_precio = $_POST["precio"];
             $tmp_categoria = $_POST["categoria"];
-            $stock = $_POST["stock"];
+            $tmp_stock = $_POST["stock"];
             $tmp_descripcion = $_POST["descripcion"];
 
             // Validación del nombre
@@ -76,6 +76,17 @@
                 $err_descripcion = "La descripción es obligatoria";
             } else {
                 $descripcion = $tmp_descripcion;
+            }
+
+            if($tmp_stock == '' || $tmp_stock < 0){
+                $tmp_stock = 0;
+            }else{
+                $patron = "/^[0-9]$/";
+                if(!preg_match($patron,$tmp_stock)){
+                    $err_stock = "El stock solo acepta números";
+                }else{
+                    $stock = $tmp_stock;
+                }
             }
             
             // Si no hay errores, actualizamos el producto
@@ -119,6 +130,7 @@
             <div class="mb-3">
                 <label class="form-label">Stock</label>
                 <input class="form-control" type="text" name="stock" value="<?php echo htmlspecialchars($stock); ?>" >
+                <?php if ($err_stock) echo "<span class='error' style='color: red;'>$err_stock</span>"; ?>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="descripcion">Descripción:</label>

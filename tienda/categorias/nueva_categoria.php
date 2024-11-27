@@ -18,8 +18,10 @@
     ?>
 </head>
 <body>
+    
     <h1>Crear Categoría</h1>
     <?php
+    
         if($_SERVER["REQUEST_METHOD"] == "POST"){
             $tmp_categoria = $_POST["categoria"];
             $tmp_descripcion = $_POST["descripcion"];
@@ -34,7 +36,7 @@
                 if(!preg_match($patron,$tmp_categoria )){
                     $err_categoria = "La categoría solo puede contener letras";
                 }else{
-                    if(strlen($tmp_categoria) < 3 || strlen($tmp_categoria) > 50){
+                    if(strlen($tmp_categoria) < 2 || strlen($tmp_categoria) > 50){
                         $err_categoria = "La categoría no puede ser menor a 4 ni mayor a 40 caracteres";
                     }else{
                         $categoria = $tmp_categoria;
@@ -52,13 +54,17 @@
                 $sql = "INSERT INTO categorias (categoria, descripcion) 
                 VALUES ('$categoria','$descripcion')";
 
-                $_conexion -> query($sql);
+                if ($_conexion->query($sql)) {
+                    echo "<p class='text-success'>Categoría creada correctamente.</p>";
+                } else {
+                    echo "<p class='text-danger'>Error al crear el producto: " . $_conexion->error . "</p>";
+                }
             }
             
         }
     ?>
 
-    <form class="col-4" action="nueva_categoria.php" method="post">
+    <form class="col-3" action="nueva_categoria.php" method="post">
         <div class="mb-3">
             <label class="form-label" for="categoria" >categoria:</label>
             <input class="form-control" type="text" name = "categoria" >  
@@ -67,12 +73,13 @@
             <br>
         <div class="mb-3">
             <label class="form-label" for="descripcion" >Descripción:</label>
+            <br>
             <textarea  name="descripcion" rows="4" cols="50" ></textarea>
             <?php if(isset($err_descripcion)) echo "<span class='error'>$err_descripcion</span>" ?>
         </div>
             <br>
         <div class="mb-3">
-            <input class="btn btn-primary" type="submit" value="Insertar">
+            <input class="btn btn-success" type="submit" value="Insertar">
             <a class="btn btn-secondary" href="index.php">Volver</a>
         </div>
     </form>

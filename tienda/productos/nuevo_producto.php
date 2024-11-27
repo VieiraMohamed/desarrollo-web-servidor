@@ -19,6 +19,7 @@
 <body>
     <h1>Crear Nuevo Producto</h1>
     <?php
+    
         // Inicialización de variables
         $nombre = $precio = $stock = $categoria = $descripcion = $imagen = "";
         $err_nombre = $err_precio = $err_categoria = $err_descripcion = $err_imagen = "";
@@ -38,7 +39,7 @@
 
             if ($tmp_nombre == '') {
                 $err_nombre = "El nombre es obligatorio";
-            } elseif (strlen($tmp_nombre) < 3 || strlen($tmp_nombre) > 50) {
+            } elseif (strlen($tmp_nombre) < 2 || strlen($tmp_nombre) > 50) {
                 $err_nombre = "El nombre debe tener entre 3 y 50 caracteres";
             } else {
                 $nombre = $tmp_nombre;
@@ -63,7 +64,7 @@
                 $categoria = $tmp_categoria;
             }
 
-            if($stock == ''){
+            if($stock == '' || $stock < 0){
                 $stock = 0;
             }
 
@@ -113,7 +114,7 @@
         </div>
         <div class="mb-3">
             <label class="form-label" for="stock">Stock:</label>
-            <input class="form-control" type="number" name="stock" value="<?php echo htmlspecialchars($stock); ?>">
+            <input class="form-control" type="text" name="stock" value="<?php echo htmlspecialchars($stock); ?>">
         </div>
         <div class="mb-3">
             <label class="form-label" for="categoria">Categoría:</label>
@@ -139,7 +140,7 @@
             <?php if ($err_descripcion) echo "<span class='error'>$err_descripcion</span>"; ?>
         </div>
         <div class="mb-3">
-            <input class="btn btn-primary" type="submit" value="Insertar">
+            <input class="btn btn-success" type="submit" value="Insertar">
             <a class="btn btn-secondary" href="index.php">Volver</a>
         </div>
     </form>

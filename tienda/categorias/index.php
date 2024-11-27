@@ -10,11 +10,25 @@
         ini_set( "display_errors", 1 );
 
         require('../util/conexion.php');
+        session_start(); 
+        if (!isset($_SESSION["usuario"])) { 
+            header("Location: ../usuario/iniciar_sesion.php"); 
+            exit();
+        }
     ?>
 </head>
 <body>  
     <div class ="container">
         
+        <div class="d-flex justify-content-center"> 
+            <?php if (isset($_SESSION["usuario"])) {
+                echo "<h2>Bienvenid@ ". $_SESSION["usuario"] . "</h2>"; 
+                } else { 
+                    echo "<h2>Bienvenid@ invitado</h2>"; 
+                } ?> 
+        </div>
+
+
         <?php 
             if($_SERVER["REQUEST_METHOD"] == "POST"){
                 $categoria = $_POST["categoria"];
@@ -28,12 +42,18 @@
             $resultado = $_conexion -> query($sql);
             
         ?>
+
+        <ul class="nav justify-content-end">
+            <li>
+                <a class="btn btn-warning" href="../usuario/cerrar_sesion.php">Cerrar sesión</a>
+            </li>
+        </ul> 
+
         <table class="table table-striped table-hover">
             <thead class="table-dark">
                 <tr>
                     <th>Categoría</th>
                     <th>Descripción</th>
-                    <th></th>
                     <th></th>
                     <th></th>
                 </tr>
@@ -61,9 +81,26 @@
                     ?>
             </tbody>
         </table>
-        <td>
-            <a class="btn btn-primary" href="nueva_categoria.php">Crear Categoría</a>
-        </td>   
+ 
+        <table>
+        <thead>
+            <th>
+                <div>
+                    <a class="btn btn-primary" href="nueva_categoria.php">Crear Categoría</a>                    
+                </div>
+            </th>
+            <th>
+                <div>
+                    <a class="btn btn-primary" href="../productos/index.php">Ir a Productos</a>
+                </div>
+            </th>
+            <th>
+                <div>
+                    <a class="btn btn-secondary" href="../index.php">Volver a Página Principal</a>
+                </div>
+            </th>
+        </thead>
+     </table>
     </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>

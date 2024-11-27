@@ -43,10 +43,20 @@
     
     require('./util/conexion.php');
     session_start();
+ 
     ?>
 </head>
 <body>
 <div class="container">
+
+    <div class="d-flex justify-content-center"> 
+        <?php if (isset($_SESSION["usuario"])) {
+            echo "<h2>Bienvenid@ ". $_SESSION["usuario"] . "</h2>"; 
+            } else { 
+                echo "<h2>Bienvenid@ invitado</h2>"; 
+            } ?> 
+    </div>
+
     <?php
     
 
@@ -73,7 +83,16 @@
     <!-- NAVBAR -->
     <?php
         if (isset($_SESSION["usuario"])) { ?>
-            <ul class="nav justify-content-end">
+            <ul class="nav justify-content-end">               
+                <li class="nav-item">
+                    <a class="nav-link" href="./categorias/index.php">Categorías</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="./productos/index.php">Productos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="./usuario/modificar_contrasena.php">Modificar Contraseña</a>
+                </li>
                 <li>
                     <a class="btn btn-warning" href="./usuario/cerrar_sesion.php">Cerrar sesión</a>
                 </li>
