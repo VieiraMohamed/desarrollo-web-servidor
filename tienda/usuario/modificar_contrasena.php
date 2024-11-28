@@ -11,79 +11,73 @@
         }
     </style>
     <?php
-    error_reporting(E_ALL);
-    ini_set("display_errors", 1);
-    require('../util/conexion.php');
-    session_start();
-
-    if (!isset($_SESSION["usuario"])) {
-        header("Location: iniciar_sesion.php");
-        exit();
-    }
-
-    $usuario = $_SESSION["usuario"];
-    $err_contrasena_actual = $err_contrasena = "";
-
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        $contrasena_actual = $_POST["contrasena_actual"];
-        $nueva_contrasena = $_POST["nueva_contrasena"];
-        $confirmar_contrasena = $_POST["confirmar_contrasena"];
-
-        $sql = "SELECT contrasena FROM usuarios WHERE usuario = ?";
-        $stmt = $_conexion->prepare($sql);
-        $stmt->bind_param("s", $usuario);
-        $stmt->execute();
-        $resultado = $stmt->get_result();
-
-        if ($resultado->num_rows === 1) {
-            $datos_usuario = $resultado->fetch_assoc();
-            $hashed_contrasena_actual = $datos_usuario["contrasena"];
-            
-            // Añadiendo depuración
-            echo "Contraseña ingresada: $contrasena_actual<br>";
-            echo "Contraseña almacenada (hashed): $hashed_contrasena_actual<br>";
-
-            if (password_verify($contrasena_actual, $hashed_contrasena_actual)) {
-                if ($nueva_contrasena === $confirmar_contrasena) {
-                    $hashed_contrasena = password_hash($nueva_contrasena, PASSWORD_DEFAULT);
-                    $sql_update = "UPDATE usuarios SET contrasena = ? WHERE usuario = ?";
-                    $stmt_update = $_conexion->prepare($sql_update);
-                    $stmt_update->bind_param("ss", $hashed_contrasena, $usuario);
-                    if ($stmt_update->execute()) {
-                        echo "<p class='text-success'>Contraseña actualizada correctamente.</p>";
-                    } else {
-                        echo "<p class='text-danger'>Error al actualizar la contraseña: " . $_conexion->error . "</p>";
-                    }
-                } else {
-                    $err_contrasena = "Las nuevas contraseñas no coinciden.";
-                }
-            } else {
-                $err_contrasena_actual = "La contraseña actual es incorrecta.";
-            }
-        } else {
-            $err_contrasena_actual = "El usuario no existe.";
+        error_reporting(E_ALL);
+        ini_set("display_errors", 1);
+        require('../util/conexion.php');
+        session_start();
+        function depurar(string $entrada) : string {
+            $salida = htmlspecialchars($entrada); 
+            $salida = trim($salida); 
+            $salida = stripslashes($salida); 
+            $salida = preg_replace('/\s+/', ' ', $salida); 
+            return $salida; 
         }
-        $stmt->close();
-    }
+
     ?>
 </head>
 <body>
     <div class="container">
         <h1>Cambiar Contraseña</h1>
-        <form class="col-6" action="" method="post">
+        <?php
+        $usuario = $_SESSION["usuario"];
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $contrasena_actual = depurar($_POST["contrasena_actual"]);
+            $nueva_contrasena = depurar($_POST["nueva_contrasena"]);
+            $confirmar_contrasena = depurar($_POST["confirmar_contrasena"]);
+
+            $sql = "SELECT * FROM usuarios WHERE usuario = '$usuario'";
+            $resultado = $_conexion->query($sql);
+
+
+            if ($resultado->num_rows == 0) {
+                $err_usuario = "El usuario $usuario no existe.";
+            } else {
+                $datos_usuario = $resultado->fetch_assoc();
+                if (password_verify($contrasena_actual, $datos_usuario["contrasena"])) {
+                    if ($nueva_contrasena === $confirmar_contrasena) {
+                        $hashed_contrasena = password_hash($nueva_contrasena, PASSWORD_DEFAULT);
+                        $sql_update = "UPDATE usuarios SET contrasena = '$hashed_contrasena' WHERE usuario = '$usuario'";
+                        if ($_conexion->query($sql_update)) {
+                            echo "<p class='text-success'>Contraseña actualizada correctamente.</p>";
+                        } else {
+                            echo "<p class='text-danger'>Error al actualizar la contraseña: " . $_conexion->error . "</p>";
+                        }
+                    } else {
+                        $err_contrasena = "Las nuevas contraseñas no coinciden.";
+                    }
+                } else {
+                    $err_contrasena_actual = "La contraseña actual es incorrecta.";
+                }
+            }
+        }
+
+        ?>
+
+        
+        <form class="col-6" action="" method="post" enctype="multipart/form-data">
             <div class="mb-3">
                 <label class="form-label">Contraseña Actual</label>
-                <input class="form-control" type="password" name="contrasena_actual" required>
-                <?php if (!empty($err_contrasena_actual)) echo "<span class='error'>$err_contrasena_actual</span>" ?>
+                <input class="form-control" type="password" name="contrasena_actual">
+                <?php if (isset($err_contrasena_actual)) echo "<span class='error'>$err_contrasena_actual</span>" ?>
             </div>
             <div class="mb-3">
                 <label class="form-label">Nueva Contraseña</label>
-                <input class="form-control" type="password" name="nueva_contrasena" required>
+                <input class="form-control" type="password" name="nueva_contrasena">
             </div>
             <div class="mb-3">
                 <label class="form-label">Confirmar Nueva Contraseña</label>
-                <input class="form-control" type="password" name="confirmar_contrasena" required>
-                <?php if (!empty($err_contrasena)) echo "<span class='error'>$err_contrasena</span>" ?>
+                <input class="form-control" type="password" name="confirmar_contrasena">
+                <?php if (isset($err_contrasena)) echo "<span class='error'>$err_contrasena</span>" ?>
             </div>
             <div class="mb-3">
                 <input class="btn btn-primary" type="submit" value="Cambiar Contraseña">

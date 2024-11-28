@@ -15,13 +15,20 @@
         ini_set( "display_errors", 1 );
 
         require('../util/conexion.php');
+        function depurar(string $entrada) : string {
+            $salida = htmlspecialchars($entrada); 
+            $salida = trim($salida); 
+            $salida = stripslashes($salida); 
+            $salida = preg_replace('/\s+/', ' ', $salida); 
+            return $salida; 
+        }
     ?>
 </head>
 <body>
     <?php
         if($_SERVER["REQUEST_METHOD"] == "POST"){
-            $tmp_usuario = $_POST["usuario"];
-            $tmp_contrasena = $_POST["contrasena"];
+            $tmp_usuario = depurar($_POST["usuario"]);
+            $tmp_contrasena = depurar($_POST["contrasena"]);
 
 
             if($tmp_usuario == ''){
@@ -69,10 +76,11 @@
                     exit;
                 }
             }
+            
+            
 
-            
-            
         }
+
     ?>
 
     <div class="container">

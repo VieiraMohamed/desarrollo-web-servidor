@@ -15,13 +15,21 @@
         ini_set( "display_errors", 1 );
 
         require('../util/conexion.php');
+        function depurar(string $entrada) : string {
+            $salida = htmlspecialchars($entrada); 
+            $salida = trim($salida); 
+            $salida = stripslashes($salida); 
+            $salida = preg_replace('/\s+/', ' ', $salida); 
+            return $salida; 
+        }
     ?>
 </head>
 <body>
     <?php
         if($_SERVER["REQUEST_METHOD"] == "POST"){
-            $usuario = $_POST["usuario"];
-            $contrasena = $_POST["contrasena"];
+            $usuario = depurar($_POST["usuario"]);
+            $contrasena = depurar($_POST["contrasena"]);
+            
 
             $sql = "SELECT * FROM usuarios WHERE usuario = '$usuario'";
             $resultado = $_conexion -> query($sql);
@@ -39,8 +47,7 @@
                 $acceso_concedido = password_verify($contrasena,$datos_usuario["contrasena"]);
                 //var_dump($acceso_concedido);
                 if($acceso_concedido){
-                    // todo guay
-                    echo "<h2>Todo guay</h2>";
+
                     session_start();
                     $_SESSION["usuario"] = $usuario;
                     //$_COOKIE["loquesea"] = "loquesea";

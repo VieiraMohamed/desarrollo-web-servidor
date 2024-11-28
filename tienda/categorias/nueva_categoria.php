@@ -15,6 +15,13 @@
         ini_set( "display_errors", 1 );
 
         require('../util/conexion.php');
+        function depurar(string $entrada) : string {
+            $salida = htmlspecialchars($entrada); 
+            $salida = trim($salida); 
+            $salida = stripslashes($salida); 
+            $salida = preg_replace('/\s+/', ' ', $salida); 
+            return $salida; 
+        }
     ?>
 </head>
 <body>
@@ -23,11 +30,8 @@
     <?php
     
         if($_SERVER["REQUEST_METHOD"] == "POST"){
-            $tmp_categoria = $_POST["categoria"];
-            $tmp_descripcion = $_POST["descripcion"];
-
-            /* $categoria = "";
-            $descripcion = ""; */
+            $tmp_categoria = depurar($_POST["categoria"]);
+            $tmp_descripcion = depurar($_POST["descripcion"]);
 
             if($tmp_categoria  == ''){
                 $err_categoria = "La categoría es obligatoria";

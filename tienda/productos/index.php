@@ -15,6 +15,13 @@
         header("Location: ../usuario/iniciar_sesion.php"); 
         exit();
     }
+    function depurar(string $entrada) : string {
+        $salida = htmlspecialchars($entrada); 
+        $salida = trim($salida); 
+        $salida = stripslashes($salida); 
+        $salida = preg_replace('/\s+/', ' ', $salida); 
+        return $salida; 
+    }
     ?>
 </head>
 <body>
@@ -31,13 +38,13 @@
     <?php
 
 
-    // Si el formulario es enviado por POST
+ 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        // Obtener el id_producto desde el formulario
-        $id_producto = $_POST["id_producto"];
+
+        $id_producto = depurar($_POST["id_producto"]);
         //echo "<h1>Borrando producto con ID: $id_producto</h1>";
 
-        // Borrar producto usando el id correcto
+        //borro producto usando el id correcto
         $sql = "DELETE FROM productos WHERE id_producto = $id_producto";
         if ($_conexion->query($sql)) {
             echo "<p class='text-success'>Producto eliminado correctamente.</p>";
@@ -46,9 +53,9 @@
         }
     }
 
-    // Obtener todos los productos
+    //obtengo todos los productos
     $sql = "SELECT * FROM productos";
-    $resultado = $_conexion->query($sql); // Asegúrate de usar la variable correcta
+    $resultado = $_conexion->query($sql); 
     ?>
 
     <ul class="nav justify-content-end">
@@ -91,7 +98,7 @@
                 </td>
                 <td>
                     <form action="" method="post">
-                        <!-- Asegúrate de que el campo oculto tenga el nombre correcto: id_producto -->
+                        <!--aseguro de que el campo oculto tenga el nombre correcto: id_producto-->
                         <input type="hidden" name="id_producto" value="<?php echo $fila["id_producto"] ?>">
                         <input class="btn btn-danger" type="submit" value="Borrar">
                     </form>
@@ -103,7 +110,7 @@
         </tbody>
     </table>
 
-    <!-- Botón Nuevo Producto fuera de la tabla -->
+    <!--boton fuera de la tabla-->
      <table>
         <thead>
             <th>

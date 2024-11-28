@@ -15,6 +15,13 @@
             header("Location: ../usuario/iniciar_sesion.php"); 
             exit();
         }
+        function depurar(string $entrada) : string {
+            $salida = htmlspecialchars($entrada); 
+            $salida = trim($salida); 
+            $salida = stripslashes($salida); 
+            $salida = preg_replace('/\s+/', ' ', $salida); 
+            return $salida; 
+        }
     ?>
 </head>
 <body>  
@@ -31,11 +38,15 @@
 
         <?php 
             if($_SERVER["REQUEST_METHOD"] == "POST"){
-                $categoria = $_POST["categoria"];
+                $categoria = depurar($_POST["categoria"]);
                 //echo "<h1>$id</h1>";
 
                 $sql = "DELETE FROM categorias WHERE categoria = '$categoria'";
-                $_conexion -> query($sql);
+                if ($_conexion->query($sql)) {
+                    echo "<p class='text-success'>Categoría eliminada correctamente.</p>";
+                } else {
+                    echo "<p class='text-danger'>Error al eliminar la categoría: " . $_conexion->error . "</p>";
+                }
             }
 
             $sql = "SELECT * FROM categorias";
