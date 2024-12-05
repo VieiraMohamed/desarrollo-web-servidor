@@ -26,6 +26,9 @@
 </head>
 <body>
     <?php
+    $usuario = ''; 
+    $err_usuario = $err_contrasena = $err_confirmar_contrasena = '';
+        
         if($_SERVER["REQUEST_METHOD"] == "POST"){
             $tmp_usuario = depurar($_POST["usuario"]);
             $tmp_contrasena = depurar($_POST["contrasena"]);
@@ -98,6 +101,7 @@
             </div>
             <div class="mb-3">
                 <input class="btn btn-primary" type="submit" value="Registrarse">
+                <a class="btn btn-secondary" href="../index.php">Volver</a>
             </div>           
         </form>
         <div class="mb-3">

@@ -74,10 +74,10 @@
                 <?php } else { ?>
                     <ul class="nav justify-content-end">
                         <li class="nav-item">
-                            <a class="nav-link" href="./usuario/registro.php">Registrarse</a>
+                            <a class="nav-link" href="./usuario/registro.php">Regístrate</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="./usuario/iniciar_sesion.php">Login</a>
+                            <a class="nav-link" href="./usuario/iniciar_sesion.php">Inícia Sesión</a>
                         </li>
                     </ul>
             <?php } ?>

@@ -42,9 +42,9 @@
             $categoria = depurar($_POST["categoria"]);
 
             // Verificar si hay productos asociados a la categoría
-            $verificar_producto = "SELECT COUNT(*) as count FROM productos WHERE categoria = '$categoria'";
-            $resultado_verificar = $_conexion->query($verificar_producto);
-            $count = $resultado_verificar->fetch_assoc()["count"];
+            $sql = "SELECT COUNT(*) as count FROM productos WHERE categoria = '$categoria'";
+            $resultado = $_conexion->query($sql);
+            $count = $resultado->fetch_assoc()["count"];
 
             if ($count > 0) {
                 echo "<p class='text-danger'>No se puede eliminar la categoría '$categoria' porque tiene productos asociados. Primero elimina los productos y luego inténtalo de nuevo.</p>";

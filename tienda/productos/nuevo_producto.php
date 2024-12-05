@@ -29,7 +29,7 @@
     
         
         $nombre = $precio = $stock = $categoria = $descripcion = $imagen = "";
-        $err_nombre = $err_precio = $err_categoria = $err_descripcion = $err_imagen = "";
+        $err_nombre = $err_precio = $err_categoria = $err_stock = $err_descripcion = $err_imagen = "";
 
         // obtengo las categorías para el select
         $sql = "SELECT * FROM categorias";
@@ -39,18 +39,30 @@
 
             $tmp_nombre = depurar($_POST['nombre']);
             $tmp_precio = depurar($_POST['precio']);
-            $stock = depurar($_POST['stock']);
+            $tmp_stock = depurar($_POST['stock']);
             $tmp_categoria = depurar($_POST['categoria']);
             $tmp_descripcion = depurar($_POST["descripcion"]);
             $tmp_imagen = depurar($_FILES["imagen"]["name"]);
 
             if ($tmp_nombre == '') {
                 $err_nombre = "El nombre es obligatorio";
-            } elseif (strlen($tmp_nombre) < 2 || strlen($tmp_nombre) > 50) {
+            }else{
+                $patron = "/^[a-zA-Z0-9 ]+$/";
+                if(!preg_match($patron , $tmp_nombre)){
+                    $err_nombre = "El nombre solo puede tener letras,espacios en blanco y números";
+                }else{
+                    if (strlen($tmp_nombre) < 2 || strlen($tmp_nombre) > 50) {
+                        $err_nombre = "El nombre debe tener entre 2 y 50 caracteres";
+                    }
+                    else {
+                        $nombre = $tmp_nombre;
+                    }
+                }
+            } /* elseif (strlen($tmp_nombre) < 2 || strlen($tmp_nombre) > 50) {
                 $err_nombre = "El nombre debe tener entre 3 y 50 caracteres";
             } else {
                 $nombre = $tmp_nombre;
-            }
+            } */
 
             
             if ($tmp_precio == '') {
@@ -58,7 +70,7 @@
             }else{
                 $patron = "/^[0-9]{1,4}(\.[0-9]{1,2})?$/";
                 if (!preg_match($patron, $tmp_precio)) {
-                    $err_precio = "El precio debe ser un número válido con hasta 4 dígitos y 2 decimales";
+                    $err_precio = "El precio debe ser un número válido con hasta 4 dígitos y 2 decimales y no menor a cero. Ejemplo: 0000.00 o 0000.1 . 0000";
                 } else {
                     $precio = $tmp_precio;
                 }
@@ -71,15 +83,26 @@
                 $categoria = $tmp_categoria;
             }
 
-            if($stock == '' || $stock < 0){
+            if($tmp_stock == ''){
                 $stock = 0;
+            }else{
+                $patron = "/^[0-9]+$/";
+                if(!preg_match($patron, $tmp_stock)){
+                    $err_stock = "El stock debe ser 0 o un número positivo";
+                }else{
+                    $stock = $tmp_stock;
+                }
             }
 
 
             if ($tmp_descripcion == '') {
-                $err_descripcion = "La descripción es obligatoria";
+                $err_descripcion = "La descripción es obligatoria";          
             } else {
-                $descripcion = $tmp_descripcion;
+                if(strlen($tmp_descripcion) > 255){
+                    $err_descripcion = "No puede tener más de 255 carácteres";
+                }else{
+                    $descripcion = $tmp_descripcion;
+                }           
             }
 
 
@@ -128,6 +151,7 @@
         <div class="mb-3">
             <label class="form-label" for="stock">Stock:</label>
             <input class="form-control" type="text" name="stock" value="<?php echo $stock; ?>">
+            <?php if ($err_stock) echo "<span class='error'>$err_stock</span>"; ?>
         </div>
         <div class="mb-3">
             <label class="form-label" for="categoria">Categoría:</label>
