@@ -16,7 +16,7 @@
             exit();
         }
         function depurar(string $entrada) : string {
-            $salida = htmlspecialchars($entrada); 
+            $salida = htmlspecialchars($entrada, ENT_QUOTES, 'UTF-8'); 
             $salida = trim($salida); 
             $salida = stripslashes($salida); 
             $salida = preg_replace('/\s+/', ' ', $salida); 
@@ -37,10 +37,18 @@
 
 
         <?php 
-            if($_SERVER["REQUEST_METHOD"] == "POST"){
-                $categoria = depurar($_POST["categoria"]);
-                //echo "<h1>$id</h1>";
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
+            $categoria = depurar($_POST["categoria"]);
+
+            // Verificar si hay productos asociados a la categoría
+            $verificar_producto = "SELECT COUNT(*) as count FROM productos WHERE categoria = '$categoria'";
+            $resultado_verificar = $_conexion->query($verificar_producto);
+            $count = $resultado_verificar->fetch_assoc()["count"];
+
+            if ($count > 0) {
+                echo "<p class='text-danger'>No se puede eliminar la categoría '$categoria' porque tiene productos asociados. Primero elimina los productos y luego inténtalo de nuevo.</p>";
+            } else {
                 $sql = "DELETE FROM categorias WHERE categoria = '$categoria'";
                 if ($_conexion->query($sql)) {
                     echo "<p class='text-success'>Categoría eliminada correctamente.</p>";
@@ -48,10 +56,10 @@
                     echo "<p class='text-danger'>Error al eliminar la categoría: " . $_conexion->error . "</p>";
                 }
             }
+        }
 
-            $sql = "SELECT * FROM categorias";
-            $resultado = $_conexion -> query($sql);
-            
+        $sql = "SELECT * FROM categorias";
+        $resultado = $_conexion->query($sql);
         ?>
 
         <ul class="nav justify-content-end">
@@ -71,7 +79,7 @@
             </thead>
             <tbody>
                 <?php
-                    while($fila = $resultado -> fetch_assoc()){//trata el resultado como array asociativo
+                    while($fila = $resultado -> fetch_assoc()){ // trata el resultado como array asociativo
                         echo "<tr>";
                         echo "<td>". $fila["categoria"] ."</td>";
                         echo "<td>". $fila["descripcion"] ."</td>";
@@ -84,12 +92,12 @@
                         </td>
                         <td>
                             <a class="btn btn-primary" href="editar_categoria.php?categoria=<?php echo $fila["categoria"]?>">Editar</a>
-                        </td>   
-                                           
+                        </td>  
+
                     <?php
                         echo "</tr>";
                     }
-                    ?>
+                ?>
             </tbody>
         </table>
  
