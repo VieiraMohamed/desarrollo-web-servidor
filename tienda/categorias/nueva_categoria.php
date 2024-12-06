@@ -41,7 +41,7 @@
                 $err_categoria = "La categoría solo puede contener letras y espacios en blanco";
             } else {
                 if (strlen($tmp_categoria) < 2 || strlen($tmp_categoria) > 30) {
-                    $err_categoria = "La categoría no puede ser menor a 4 ni mayor a 30 caracteres";
+                    $err_categoria = "La categoría no puede ser menor a 2 ni mayor a 30 caracteres";
                 } else {
                     //verifico si la categoria ya existe
                     $sql = "SELECT * FROM categorias WHERE categoria = '$tmp_categoria'";

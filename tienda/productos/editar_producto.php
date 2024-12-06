@@ -79,12 +79,16 @@
 
 
             if ($tmp_descripcion == '') {
-                $err_descripcion = "La descripción es obligatoria";
+                $err_descripcion = "La descripción es obligatoria";          
             } else {
-                $descripcion = $tmp_descripcion;
+                if(strlen($tmp_descripcion) > 255){
+                    $err_descripcion = "No puede tener más de 255 carácteres";
+                }else{
+                    $descripcion = $tmp_descripcion;
+                }           
             }
 
-            if($tmp_stock == '' || $tmp_stock < 0){
+            if($tmp_stock == '' ){
                 $tmp_stock = 0;
             }else{
                 $patron = "/^[0-9]+$/";

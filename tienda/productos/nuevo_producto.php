@@ -58,11 +58,7 @@
                         $nombre = $tmp_nombre;
                     }
                 }
-            } /* elseif (strlen($tmp_nombre) < 2 || strlen($tmp_nombre) > 50) {
-                $err_nombre = "El nombre debe tener entre 3 y 50 caracteres";
-            } else {
-                $nombre = $tmp_nombre;
-            } */
+            } 
 
             
             if ($tmp_precio == '') {
@@ -88,7 +84,7 @@
             }else{
                 $patron = "/^[0-9]+$/";
                 if(!preg_match($patron, $tmp_stock)){
-                    $err_stock = "El stock debe ser 0 o un número positivo";
+                    $err_stock = "El stock debe solo acpeta números";
                 }else{
                     $stock = $tmp_stock;
                 }
