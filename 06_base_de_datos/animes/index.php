@@ -38,14 +38,38 @@
         <?php
             if($_SERVER["REQUEST_METHOD"] == "POST"){
                 $id_anime = $_POST["id_anime"];
-                echo "<h1>$id_anime</h1>";
+                //echo "<h1>$id_anime</h1>";
                 //borrar anime
-                $sql = "DELETE FROM animes WHERE id_anime = $id_anime";
-                $_conexion -> query($sql);
+                /* $sql = "DELETE FROM animes WHERE id_anime = $id_anime";
+                $_conexion -> query($sql); */
+
+
+
+                /* Las 3 etapas de la prepared statements
+            1. Preparacion
+            2. Enlazado (binding)
+            3. Ejecucion */
+            $sql = $_conexion -> prepare("DELETE FROM animes WHERE id_anime = ?");
+        //2. Enlazado
+            $sql -> bind_param("i",
+            $id_anime
+            );
+
+        //3. Ejecución
+            $sql -> execute();
+
+
+
+
             }
 
             $sql = "SELECT * FROM animes";
             $resultado = $_conexion -> query($sql);
+
+
+            $_conexion -> close();
+
+            
             /**
              * Aplicamos la funcion QUERY a la conexion , donde se ejecuta la 
              * sentencia SQL hecha

@@ -18,8 +18,23 @@
             $usuario = $_POST["usuario"];
             $contrasena = $_POST["contrasena"];
 
-            $sql = "SELECT * FROM usuarios WHERE usuario = '$usuario'";
-            $resultado = $_conexion -> query($sql);
+           /*  $sql = "SELECT * FROM usuarios WHERE usuario = '$usuario'";
+            $resultado = $_conexion -> query($sql); */
+
+            /*1. Preparacion */
+            $sql = $_conexion -> prepare("SELECT * FROM usuarios WHERE usuario = ?");
+            //2. Enlazado
+            $sql -> bind_param("s",
+            $usuario
+            );
+
+            //3. Ejecución
+            $sql -> execute();
+            //4. Retrieve (ESTO ES SOLO PARA LOS SELECT QUE TIENE ALGUN PARAMETRO)
+            $resultado = $sql -> get_result();
+
+
+
             //var_dump($resultado);
 
             if($resultado -> num_rows == 0){
@@ -39,6 +54,12 @@
                     session_start();
                     $_SESSION["usuario"] = $usuario;
                     //$_COOKIE["loquesea"] = "loquesea";
+                    
+                    
+                    //4.
+                    $_conexion -> close();
+
+
                     header("location: ../index.php");
                     exit;
                 }else{

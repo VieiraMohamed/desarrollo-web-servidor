@@ -18,12 +18,29 @@
         <?php
         //echo "<h1>".$_GET['id_anime']."</h1>";
         
-        $id_anime = $_GET["id_anime"];
+        $id_anime = $_GET["id_anime"];/*
         $sql = "SELECT * FROM animes WHERE id_anime = $id_anime";
         $resultado= $_conexion -> query($sql);
+ */
 
-        
+         /* Las 3 etapas de la prepared statements
+            1. Preparacion
+            2. Enlazado (binding)
+            3. Ejecucion */
+            $sql = $_conexion -> prepare("SELECT * FROM animes WHERE id_anime = ?");
+            //2. Enlazado
+            $sql -> bind_param("i",
+            $id_anime
+            );
+
+            //3. Ejecución
+            $sql -> execute();
+            //4. Retrieve (ESTO ES SOLO PARA LOS SELECT QUE TIENE ALGUN PARAMETRO)
+            $resultado = $sql -> get_result();
+           
+ 
         while($fila = $resultado -> fetch_assoc()){
+
             $titulo= $fila["titulo"];
             $nombre_estudio = $fila["nombre_estudio"];
             $anno_estreno = $fila["anno_estreno"];
@@ -32,8 +49,23 @@
         }
         
 
-        $sql = "SELECT * FROM estudios ORDER BY nombre_estudio";
-        $resultado = $_conexion -> query($sql);
+            /* $sql = "SELECT * FROM estudios ORDER BY nombre_estudio";
+             $resultado = $_conexion -> query($sql); */
+
+            /* Las 3 etapas de la prepared statements
+            1. Preparacion */
+            $sql = $_conexion -> prepare("SELECT * FROM estudios ORDER BY ?");
+             //2. Enlazado
+            $sql -> bind_param("s",
+            $nombre_estudio
+            );
+
+            //3. Ejecución
+            $sql -> execute();
+            //4. Retrieve (ESTO ES SOLO PARA LOS SELECT QUE TIENE ALGUN PARAMETRO)
+            $resultado = $sql -> get_result();
+        
+
         $estudios = [];
 
         while($fila = $resultado -> fetch_assoc()){
@@ -48,15 +80,37 @@
             $anno_estreno = $_POST["anno_estreno"];
             $num_temporadas = $_POST["num_temporadas"];
 
-            $sql= "UPDATE animes SET
+            /* $sql= "UPDATE animes SET
                 titulo = '$titulo',
                 nombre_estudio = '$nombre_estudio',
                 anno_estreno = $anno_estreno,
                 num_temporadas = $num_temporadas
                 WHERE id_anime = $id_anime
             ";
-            $_conexion -> query($sql);
+            $_conexion -> query($sql); */
+
+            /*1. Preparacion */
+            $sql = $_conexion -> prepare("UPDATE animes SET
+                titulo = ?,
+                nombre_estudio = ?,
+                anno_estreno = ?,
+                num_temporadas = ?
+                WHERE id_anime = ?
+            ");
+        //2. Enlazado
+            $sql -> bind_param("ssiii",
+            $titulo,
+            $nombre_estudio,
+            $anno_estreno,
+            $num_temporadas,
+            $id_anime
+            );
+
+        //3. Ejecución
+            $sql -> execute();
         }
+
+        $_conexion -> close();
         ?>
         
         <form class="col-6" action="" method="post" enctype="multipart/form-data">

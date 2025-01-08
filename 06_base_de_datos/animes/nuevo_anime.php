@@ -31,15 +31,49 @@
             $ubicacion_final = "./imagenes/$nombre_imagen";
 
             move_uploaded_file($ubicacion_temporal,$ubicacion_final);
-
+            
+            /*
             $sql = "INSERT INTO animes (titulo, nombre_estudio, anno_estreno, num_temporadas,imagen) 
                 VALUES ('$titulo', '$nombre_estudio', $anno_estreno, $num_temporadas,'$ubicacion_final')";
 
             $_conexion -> query($sql);
+            */
+
+
+
+
+            /* Las 3 etapas de la prepared statements
+            1. Preparacion
+            2. Enlazado (binding)
+            3. Ejecucion */
+            $sql = $_conexion -> prepare("INSERT INTO animes (titulo, nombre_estudio, anno_estreno, num_temporadas,imagen) 
+                VALUES(?,?,?,?,?)");
+            //2. Enlazado
+            $sql -> bind_param("ssiis",
+            $titulo,
+            $nombre_estudio, 
+            $anno_estreno, 
+            $num_temporadas,
+            $ubicacion_final
+            );
+
+            //3. Ejecución
+            $sql -> execute();
+
+            
         }
+
+
+
+
+
+
         //aqui capturamos todo los estudios y los guardamos 
         $sql = "SELECT * FROM estudios ORDER BY nombre_estudio";
         $resultado = $_conexion -> query($sql);
+
+        $_conexion -> close();
+
         $estudios = [];
 
         while($fila = $resultado -> fetch_assoc()){
