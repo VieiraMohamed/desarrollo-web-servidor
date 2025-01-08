@@ -10,6 +10,13 @@
         ini_set("display_errors", 1);
 
         require('../util/conexion.php');
+        function depurar(string $entrada) : string {
+            $salida = htmlspecialchars($entrada); 
+            $salida = trim($salida); 
+            $salida = stripslashes($salida); 
+            $salida = preg_replace('/\s+/', ' ', $salida); 
+            return $salida; 
+        }
     ?>
 </head>
 <body>
@@ -17,7 +24,7 @@
         <h1>Editar Producto</h1>
         <?php
         $id_producto = $_GET["id_producto"];
-        // Consulta para obtener los datos del producto
+
         $sql = "SELECT * FROM productos WHERE id_producto = '$id_producto'";
         $resultado = $_conexion -> query($sql);
         
@@ -28,25 +35,24 @@
             $stock = $fila["stock"];
             $descripcion = $fila["descripcion"];
         }
+   
         
-        // Consulta para obtener todas las categorías de la tabla 'categorias'
         $sql_categorias = "SELECT * FROM categorias";
         $resultado_categorias = $_conexion -> query($sql_categorias);
         ?>
 
         <?php
-        // Definir las variables de error
-        $err_nombre = $err_precio = $err_categoria = $err_descripcion = '';
+
+        $err_nombre = $err_precio = $err_categoria = $err_stock = $err_descripcion = '';
 
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            // Recuperamos los datos del formulario
-            $tmp_nombre = $_POST["nombre"];
-            $tmp_precio = $_POST["precio"];
-            $tmp_categoria = $_POST["categoria"];
-            $stock = $_POST["stock"];
-            $tmp_descripcion = $_POST["descripcion"];
 
-            // Validación del nombre
+            $tmp_nombre = depurar($_POST["nombre"]);
+            $tmp_precio = depurar($_POST["precio"]);
+            $tmp_categoria = depurar($_POST["categoria"]);
+            $tmp_stock = depurar($_POST["stock"]);
+            $tmp_descripcion = depurar($_POST["descripcion"]);
+
             if ($tmp_nombre == '') {
                 $err_nombre = "El nombre es obligatorio";
             } elseif (strlen($tmp_nombre) < 3 || strlen($tmp_nombre) > 50) {
@@ -55,7 +61,7 @@
                 $nombre = $tmp_nombre;
             }
 
-            // Validación del precio
+
             if ($tmp_precio == '') {
                 $err_precio = "El precio es obligatorio";
             } elseif (!preg_match("/^[0-9]{1,4}(\.[0-9]{1,2})?$/", $tmp_precio)) {
@@ -64,30 +70,49 @@
                 $precio = $tmp_precio;
             }
 
-            // Validación de la categoría
+
             if ($tmp_categoria == '') {
                 $err_categoria = "Debe seleccionar una categoría";
             } else {
                 $categoria = $tmp_categoria;
             }
 
-            // Validación de la descripción
+
             if ($tmp_descripcion == '') {
-                $err_descripcion = "La descripción es obligatoria";
+                $err_descripcion = "La descripción es obligatoria";          
             } else {
-                $descripcion = $tmp_descripcion;
+                if(strlen($tmp_descripcion) > 255){
+                    $err_descripcion = "No puede tener más de 255 carácteres";
+                }else{
+                    $descripcion = $tmp_descripcion;
+                }           
+            }
+
+            if($tmp_stock == '' ){
+                $tmp_stock = 0;
+            }else{
+                $patron = "/^[0-9]+$/";
+                if(!preg_match($patron,$tmp_stock)){
+                    $err_stock = "El stock solo acepta números";
+                }else{
+                    $stock = $tmp_stock;
+                }
             }
             
-            // Si no hay errores, actualizamos el producto
-            if (isset($nombre,$precio,$categoria,$stock,$descripcion)) {
-                $sql_update = "UPDATE productos SET 
+
+            if (!$err_nombre && !$err_precio && !$err_categoria && !$err_stock && !$err_descripcion) {
+                $sql = "UPDATE productos SET 
                     nombre = '$nombre', 
                     precio = '$precio', 
                     categoria = '$categoria', 
                     stock = '$stock', 
                     descripcion = '$descripcion'
                     WHERE id_producto = '$id_producto'";
-                $_conexion -> query($sql_update);
+                if ($_conexion->query($sql)) {
+                    echo "<p class='text-success'>Producto actualizado correctamente.</p>";
+                } else {
+                    echo "<p class='text-danger'>Error al actualizar el producto: " . $_conexion->error . "</p>";
+                }
             }
         }
         ?>
@@ -95,22 +120,22 @@
         <form class="col-6" action="" method="post" enctype="multipart/form-data">
             <div class="mb-3">
                 <label class="form-label">Nombre</label>
-                <input class="form-control" type="text" name="nombre" value="<?php echo htmlspecialchars($nombre); ?>" >
+                <input class="form-control" type="text" name="nombre" value="<?php echo $nombre; ?>" >
                 <?php if ($err_nombre) echo "<span class='error' style='color: red;'>$err_nombre</span>"; ?>
             </div>
             <div class="mb-3">
                 <label class="form-label">Precio</label>
-                <input class="form-control" type="text" name="precio" value="<?php echo htmlspecialchars($precio); ?>" >
+                <input class="form-control" type="text" name="precio" value="<?php echo $precio; ?>" >
                 <?php if ($err_precio) echo "<span class='error' style='color: red;'>$err_precio</span>"; ?>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="categoria">Categoría:</label>
-                <select class="form-select" name="categoria" required>
+                <select class="form-select" name="categoria" >
                     <option value="">Seleccione una categoría</option>
                     <?php while ($categoria_db = $resultado_categorias->fetch_assoc()): ?>
-                        <option value="<?php echo htmlspecialchars($categoria_db['categoria']); ?>" 
-                            <?php echo ($categoria == $categoria_db['categoria']) ? 'selected' : ''; ?>>
-                            <?php echo htmlspecialchars($categoria_db['categoria']); ?>
+                        <option value="<?php echo $categoria_db['categoria']; ?>" 
+                            <?php echo ($categoria == $categoria_db['categoria']) ; ?>>
+                            <?php echo $categoria_db['categoria']; ?>
                         </option>
                     <?php endwhile; ?>
                 </select>
@@ -118,11 +143,12 @@
             </div>
             <div class="mb-3">
                 <label class="form-label">Stock</label>
-                <input class="form-control" type="text" name="stock" value="<?php echo htmlspecialchars($stock); ?>" >
+                <input class="form-control" type="text" name="stock" value="<?php echo $stock; ?>" >
+                <?php if ($err_stock) echo "<span class='error' style='color: red;'>$err_stock</span>"; ?>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="descripcion">Descripción:</label>
-                <textarea class="form-control" name="descripcion" rows="4" cols="50" ><?php echo htmlspecialchars($descripcion); ?></textarea>
+                <textarea class="form-control" name="descripcion" rows="4" cols="50" ><?php echo $descripcion; ?></textarea>
                 <?php if ($err_descripcion) echo "<span class='error' style='color: red;'>$err_descripcion</span>"; ?>
             </div>
             <div class="mb-3">

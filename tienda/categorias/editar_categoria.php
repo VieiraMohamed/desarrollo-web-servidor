@@ -10,6 +10,14 @@
         ini_set( "display_errors", 1 );
 
         require('../util/conexion.php');
+
+        function depurar(string $entrada) : string {
+            $salida = htmlspecialchars($entrada); 
+            $salida = trim($salida); 
+            $salida = stripslashes($salida); 
+            $salida = preg_replace('/\s+/', ' ', $salida); 
+            return $salida; 
+        }
     ?>
 </head>
 <body>
@@ -40,27 +48,32 @@
         //print_r($estudios);
         
         if($_SERVER["REQUEST_METHOD"] == "POST" ){
-            $categoria = $_POST["categoria"];
-            $descripcion = $_POST["descripcion"];
+            $categoria = depurar($_POST["categoria"]);
+            $descripcion = depurar($_POST["descripcion"]);
 
             $sql= "UPDATE categorias SET
                 descripcion = '$descripcion'
                 WHERE categoria = '$categoria'
             ";
-            $_conexion -> query($sql);
+            if ($_conexion->query($sql)) {
+                echo "<p class='text-success'>Categoría editada correctamente.</p>";
+            } else {
+                echo "<p class='text-danger'>Error al editar la categoría: " . $_conexion->error . "</p>";
+            }
         }
         ?>
         
         <form class="col-6" action="" method="post" enctype="multipart/form-data">
             <div class="mb-3">
-                <label class="form-label">Categoria</label>
+                <label class="form-label">Categoria:</label>
                 <input class="form-control" type="text"  value ="<?php echo $categoria?>" disabled>
                 <input class="form-control" type="hidden" name="categoria" value ="<?php echo $categoria?>" >
 
             </div>
             <div class="mb-3">
                 <label class="form-label" for="descripcion" >Descripción:</label>
-                <textarea  name="descripcion" rows="4" cols="50" required></textarea>
+                <br>
+                <textarea  name="descripcion" rows="4" cols="50" ></textarea>
             </div>
             <div class="mb-3">
                 <input type="hidden" name="categoria" value="<?php echo $categoria?>">
