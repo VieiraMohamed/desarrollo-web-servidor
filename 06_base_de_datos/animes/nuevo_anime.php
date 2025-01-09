@@ -63,12 +63,71 @@
             
         }
 
+/* La diferencia clave es cómo se manejan los datos en la consulta SELECT: primero ejecutas 
+la declaración y luego enlazas el resultado para obtener los datos. En contraste, para una 
+consulta INSERT, necesitas enlazar los parámetros primero y luego ejecutar la declaración. 
+
+
+pero en una utilizo bind_param y en la otra se usa bind_result, no seria mas apropiado seguir
+ la manera del bind_param?
+
+Entiendo tu preocupación. Sin embargo, bind_param y bind_result tienen propósitos diferentes
+ y se utilizan en contextos distintos:
+
+    bind_param: Se utiliza para enlazar variables a parámetros en una consulta preparada antes
+     de ejecutar la consulta. Es útil cuando necesitas enviar datos a la base de datos, 
+     como en una inserción (INSERT), actualización (UPDATE) o eliminación (DELETE).
+
+    php
+    // Ejemplo de bind_param en una consulta de inserción
+$sql = $_conexion -> prepare("INSERT INTO animes (titulo, nombre_estudio, anno_estreno, num_temporadas, imagen) VALUES(?,?,?,?,?)");
+$sql -> bind_param("ssiis", $titulo, $nombre_estudio, $anno_estreno, $num_temporadas, $ubicacion_final);
+$sql -> execute();
+
+
+bind_result: Se utiliza para enlazar variables a columnas de resultados después de ejecutar 
+una consulta preparada. Es útil cuando necesitas recuperar datos de la base de datos, como 
+en una selección (SELECT).
+php
+// Ejemplo de bind_result en una consulta de selección
+$sql = $_conexion -> prepare("SELECT nombre_estudio FROM estudios ORDER BY nombre_estudio");
+$sql -> execute();
+$sql -> bind_result($nombre_estudio);
+$estudios = [];
+while($sql -> fetch()) {
+    array_push($estudios, $nombre_estudio);
+}
+
+
+Utilizar bind_param en una consulta SELECT no sería apropiado porque bind_param está diseñado 
+para enlazar datos de entrada, no para manejar los resultados de una consulta. Por otro lado,
+ bind_result está específicamente diseñado para enlazar y manejar los resultados después de 
+ ejecutar una consulta de selección.
+
+Cada uno tiene su propio propósito y se usa en diferentes etapas del manejo de consultas 
+preparadas. Usar bind_param y bind_result en sus contextos apropiados asegura que las 
+consultas sean seguras y eficientes.
+
+
+*/
+
+
+/* $sql = $_conexion -> prepare("SELECT nombre_estudio FROM estudios ORDER BY nombre_estudio"); 
+// Ejecución 
+$sql -> execute(); 
+// Enlazar resultados 
+$sql -> bind_result($nombre_estudio); 
+// Almacenar resultados 
+$estudios = []; 
+while($sql -> fetch()) { 
+    array_push($estudios, $nombre_estudio); 
+    } 
+// Cierre de la conexión 
+$_conexion -> close(); */
 
 
 
-
-
-        //aqui capturamos todo los estudios y los guardamos 
+         //aqui capturamos todo los estudios y los guardamos 
         $sql = "SELECT * FROM estudios ORDER BY nombre_estudio";
         $resultado = $_conexion -> query($sql);
 
@@ -79,7 +138,8 @@
         while($fila = $resultado -> fetch_assoc()){
             array_push($estudios, $fila["nombre_estudio"]);
         }
-        //print_r($estudios);
+        //print_r($estudios); 
+        
         
         ?>
         

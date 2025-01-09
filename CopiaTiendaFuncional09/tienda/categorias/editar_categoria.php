@@ -27,10 +27,8 @@
         //echo "<h1>".$_GET['categoria']."</h1>";
         
         $categoria = $_GET["categoria"];
-
         $sql = "SELECT * FROM categorias WHERE categoria = '$categoria'";
         $resultado= $_conexion -> query($sql);
-        
 
         
         while($fila = $resultado -> fetch_assoc()){

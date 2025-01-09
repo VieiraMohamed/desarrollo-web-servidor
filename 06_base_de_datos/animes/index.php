@@ -47,8 +47,7 @@
 
                 /* Las 3 etapas de la prepared statements
             1. Preparacion
-            2. Enlazado (binding)
-            3. Ejecucion */
+            */
             $sql = $_conexion -> prepare("DELETE FROM animes WHERE id_anime = ?");
         //2. Enlazado
             $sql -> bind_param("i",
