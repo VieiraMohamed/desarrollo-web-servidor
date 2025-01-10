@@ -44,8 +44,16 @@
                     $err_categoria = "La categoría no puede ser menor a 2 ni mayor a 30 caracteres";
                 } else {
                     //verifico si la categoria ya existe
-                    $sql = "SELECT * FROM categorias WHERE categoria = '$tmp_categoria'";
-                    $resultado= $_conexion->query($sql);
+                    //$sql = "SELECT * FROM categorias WHERE categoria = '$tmp_categoria'";
+                    //$resultado= $_conexion->query($sql);
+                    //1. Preparacion            
+                    $sql = $_conexion -> prepare("SELECT * FROM categorias WHERE categoria = ?");
+                    //2. Enlazado
+                    $sql -> bind_param("s",$tmp_categoria);
+                    //3. Ejecución
+                    $sql -> execute();
+                    //4. Retrieve
+                    $resultado = $sql -> get_result();
                     if ($resultado->num_rows > 0) {
                         $err_categoria = "La categoría ya existe,elige otro nombre.";
                     } else {
@@ -66,14 +74,23 @@
         }
 
         if (isset($categoria) && isset($descripcion)) {
-            $sql = "INSERT INTO categorias (categoria, descripcion) 
-            VALUES ('$categoria', '$descripcion')";
+            //$sql = "INSERT INTO categorias (categoria, descripcion) 
+            //VALUES ('$categoria', '$descripcion')";
+            //1. Preparacion            
+            $sql = $_conexion -> prepare("INSERT INTO categorias (categoria, descripcion) 
+            VALUES ('$categoria', '$descripcion')");
+            //2. Enlazado
+            $sql -> bind_param("ss",$categoria,$descripcion);
+            //3. Ejecución
+            $sql -> execute();
 
             if ($_conexion->query($sql)) {
                 echo "<p class='text-success'>Categoría creada correctamente.</p>";
             } else {
                 echo "<p class='text-danger'>Error al crear la categoría: " . $_conexion->error . "</p>";
             }
+             //5.close
+             $_conexion -> close();
         }
     }
     ?>

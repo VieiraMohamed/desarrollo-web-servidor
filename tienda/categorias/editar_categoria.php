@@ -28,8 +28,16 @@
         
         $categoria = $_GET["categoria"];
 
-        $sql = "SELECT * FROM categorias WHERE categoria = '$categoria'";
-        $resultado= $_conexion -> query($sql);
+        //$sql = "SELECT * FROM categorias WHERE categoria = '$categoria'";
+        //$resultado= $_conexion -> query($sql);
+        //1. Preparacion            
+        $sql = $_conexion -> prepare("SELECT * FROM categorias WHERE categoria = ?");
+        //2. Enlazado
+        $sql -> bind_param("s",$categoria);
+        //3. Ejecución
+        $sql -> execute();
+        //4. Retrieve
+        $resultado = $sql -> get_result();
         
 
         
@@ -53,15 +61,24 @@
             $categoria = depurar($_POST["categoria"]);
             $descripcion = depurar($_POST["descripcion"]);
 
-            $sql= "UPDATE categorias SET
-                descripcion = '$descripcion'
-                WHERE categoria = '$categoria'
-            ";
-            if ($_conexion->query($sql)) {
+            //$sql= "UPDATE categorias SET
+                //descripcion = '$descripcion'
+                //WHERE categoria = '$categoria'
+            //";
+            //1. Preparacion            
+            $sql = $_conexion -> prepare("UPDATE categorias SET descripcion = ? WHERE categoria = ?");
+            //2. Enlazado
+            $sql -> bind_param("ss",$descripcion,$categoria);
+            //3. Ejecución
+            
+            
+            if ($sql -> execute()) {
                 echo "<p class='text-success'>Categoría editada correctamente.</p>";
             } else {
                 echo "<p class='text-danger'>Error al editar la categoría: " . $_conexion->error . "</p>";
             }
+            //5.close
+            $_conexion -> close();
         }
         ?>
         

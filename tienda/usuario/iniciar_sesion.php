@@ -31,9 +31,27 @@
             $contrasena = depurar($_POST["contrasena"]);
             
 
-            $sql = "SELECT * FROM usuarios WHERE usuario = '$usuario'";
-            $resultado = $_conexion -> query($sql);
+            //$sql = "SELECT * FROM usuarios WHERE usuario = '$usuario'";
+            //$resultado = $_conexion -> query($sql);
             //var_dump($resultado);
+
+
+            //1. Preparacion
+            
+            $sql = $_conexion -> prepare("SELECT * FROM usuarios WHERE usuario = ?");
+            //2. Enlazado
+            $sql -> bind_param("s",
+            $usuario
+            );
+
+            //3. Ejecución
+            $sql -> execute();
+
+            //4. Retrieve
+            $resultado = $sql -> get_result();
+
+
+
 
             if($resultado -> num_rows == 0){
                 $err_usuario = "El usuario $usuario no existe";
@@ -52,7 +70,15 @@
                     $_SESSION["usuario"] = $usuario;
                     //$_COOKIE["loquesea"] = "loquesea";
                     header("location: ../index.php");
+
+
+                    //5.close
+                    $_conexion -> close();
+
+
                     exit;
+
+
                 }else{
                     $err_contrasena = "La contraseña no coincide";
                 }

@@ -63,8 +63,18 @@
                     }
                 }
             }
-            $sql = "SELECT * FROM usuarios WHERE usuario = '$usuario'";
-            $resultado = $_conexion -> query($sql);
+           // $sql = "SELECT * FROM usuarios WHERE usuario = '$usuario'";
+            //$resultado = $_conexion -> query($sql);
+
+            //1. Preparacion            
+            $sql = $_conexion -> prepare("SELECT * FROM usuarios WHERE usuario = ?");
+            //2. Enlazado
+            $sql -> bind_param("s",$usuario);
+            //3. Ejecución
+            $sql -> execute();
+            //4. Retrieve
+            $resultado = $sql -> get_result();
+
             //var_dump($resultado);
             if($resultado -> num_rows == 1){
                 $err_usuario = "El usuario ya esta cogido";
@@ -72,10 +82,20 @@
                 if(isset($usuario,$contrasena)){
                     $contrasena_cifrada = password_hash($contrasena,PASSWORD_DEFAULT);
     
-                    $sql = "INSERT INTO usuarios VALUES ('$usuario','$contrasena_cifrada')";
-                    $_conexion -> query($sql);
+                    //$sql = "INSERT INTO usuarios VALUES ('$usuario','$contrasena_cifrada')";
+                    //$_conexion -> query($sql);
+
+                    //1. Preparacion            
+                    $sql = $_conexion -> prepare("INSERT INTO usuarios VALUES (?,?)");
+                    //2. Enlazado
+                    $sql -> bind_param("ss",$usuario,$contrasena_cifrada);
+                    //3. Ejecución
+                    $sql -> execute();
     
                     header("location: iniciar_sesion.php");
+
+                    //5.close
+                    $_conexion -> close();
                     exit;
                 }
             }

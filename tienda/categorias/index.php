@@ -42,8 +42,18 @@
             $categoria = depurar($_POST["categoria"]);
 
             // Verificar si hay productos asociados a la categoría
-            $sql = "SELECT COUNT(*) as count FROM productos WHERE categoria = '$categoria'";
-            $resultado = $_conexion->query($sql);
+           // $sql = "SELECT COUNT(*) as count FROM productos WHERE categoria = '$categoria'";
+            //$resultado = $_conexion->query($sql);
+
+            //1. Preparacion            
+            $sql = $_conexion -> prepare("SELECT COUNT(*) as count FROM productos WHERE categoria = ?");
+            //2. Enlazado
+            $sql -> bind_param("s",$categoria);
+            //3. Ejecución
+            $sql -> execute();
+            //4. Retrieve
+            $resultado = $sql -> get_result();
+
             $count = $resultado->fetch_assoc()["count"];
 
             if ($count > 0) {
@@ -60,6 +70,8 @@
 
         $sql = "SELECT * FROM categorias";
         $resultado = $_conexion->query($sql);
+        //5.close
+        $_conexion -> close();
         ?>
 
         <ul class="nav justify-content-end">

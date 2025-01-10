@@ -25,8 +25,18 @@
         <?php
         $id_producto = $_GET["id_producto"];
 
-        $sql = "SELECT * FROM productos WHERE id_producto = '$id_producto'";
-        $resultado = $_conexion -> query($sql);
+        //$sql = "SELECT * FROM productos WHERE id_producto = '$id_producto'";
+        //$resultado = $_conexion -> query($sql);
+
+        //1. Preparacion            
+        $sql = $_conexion -> prepare("SELECT * FROM productos WHERE id_producto = ?");
+        //2. Enlazado
+        $sql -> bind_param("i",$id_producto);
+        //3. Ejecución
+        $sql -> execute();
+        //4. Retrieve
+        $resultado = $sql -> get_result();
+
         
         while($fila = $resultado -> fetch_assoc()){
             $nombre = $fila["nombre"];
@@ -39,6 +49,8 @@
         
         $sql_categorias = "SELECT * FROM categorias";
         $resultado_categorias = $_conexion -> query($sql_categorias);
+        //5.close
+        $_conexion -> close();
         ?>
 
         <?php

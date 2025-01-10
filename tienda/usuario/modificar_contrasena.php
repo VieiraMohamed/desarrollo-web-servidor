@@ -35,8 +35,22 @@
             $nueva_contrasena = depurar($_POST["nueva_contrasena"]);
             $confirmar_contrasena = depurar($_POST["confirmar_contrasena"]);
 
-            $sql = "SELECT * FROM usuarios WHERE usuario = '$usuario'";
-            $resultado = $_conexion->query($sql);
+            //$sql = "SELECT * FROM usuarios WHERE usuario = '$usuario'";
+            //$resultado = $_conexion->query($sql);
+
+            //1. Preparacion
+            
+            $sql = $_conexion -> prepare("SELECT * FROM usuarios WHERE usuario = ?");
+            //2. Enlazado
+            $sql -> bind_param("s",
+            $usuario
+            );
+
+            //3. Ejecución
+            $sql -> execute();
+
+            //4. Retrieve
+            $resultado = $sql -> get_result();
 
 
             if ($resultado->num_rows == 0) {
@@ -46,7 +60,21 @@
                 if (password_verify($contrasena_actual, $datos_usuario["contrasena"])) {
                     if ($nueva_contrasena === $confirmar_contrasena) {
                         $hashed_contrasena = password_hash($nueva_contrasena, PASSWORD_DEFAULT);
-                        $sql_update = "UPDATE usuarios SET contrasena = '$hashed_contrasena' WHERE usuario = '$usuario'";
+                        //$sql_update = "UPDATE usuarios SET contrasena = '$hashed_contrasena' WHERE usuario = '$usuario'";
+                        
+                        //1. Preparacion           
+                        $sql_update = $_conexion -> prepare("UPDATE usuarios SET contrasena = ? WHERE usuario = ?");
+                        //2. Enlazado
+                        $sql_update -> bind_param("ss",
+                        $hashed_contrasena,$usuario
+                        );
+                        //3. Ejecución
+                        $sql_update -> execute();
+                        
+                        
+
+
+
                         if ($_conexion->query($sql_update)) {
                             echo "<p class='text-success'>Contraseña actualizada correctamente.</p>";
                         } else {
@@ -59,6 +87,8 @@
                     $err_contrasena_actual = "La contraseña actual es incorrecta.";
                 }
             }
+            //5.close
+            $_conexion -> close();
         }
 
         ?>

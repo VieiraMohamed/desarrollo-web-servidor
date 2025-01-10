@@ -122,14 +122,26 @@
 
             //si todo esta bien
             if (isset($nombre, $precio, $categoria, $descripcion, $tmp_imagen) && !$err_nombre && !$err_precio && !$err_categoria && !$err_descripcion && !$err_imagen) {
-                $sql = "INSERT INTO productos (nombre, precio, stock, categoria, imagen, descripcion) 
-                        VALUES ('$nombre', '$precio', '$stock', '$categoria', '$tmp_imagen', '$descripcion')";
+                //$sql = "INSERT INTO productos (nombre, precio, stock, categoria, imagen, descripcion) 
+                        //VALUES ('$nombre', '$precio', '$stock', '$categoria', '$tmp_imagen', '$descripcion')";
+
+                //1. Preparacion           
+                $sql = $_conexion -> prepare("INSERT INTO productos (nombre, precio, stock, categoria, imagen, descripcion) 
+                        VALUES (?,?,?,?,?,?)");
+                //2. Enlazado
+                $sql -> bind_param("siisss",$nombre,$precio,$stock,$categoria,$tmp_imagen,$descripcion);
+                //3. Ejecución
+                $sql -> execute();
+
+
                 if ($_conexion->query($sql)) {
                     echo "<p class='text-success'>Producto creado correctamente.</p>";
                 } else {
                     echo "<p class='text-danger'>Error al crear el producto: " . $_conexion->error . "</p>";
                 }
             }
+            //5.close
+            $_conexion -> close();
         }
     ?>
 

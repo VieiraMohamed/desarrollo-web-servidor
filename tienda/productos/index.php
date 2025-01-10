@@ -45,7 +45,16 @@
         //echo "<h1>Borrando producto con ID: $id_producto</h1>";
 
         //borro producto usando el id correcto
-        $sql = "DELETE FROM productos WHERE id_producto = $id_producto";
+        //$sql = "DELETE FROM productos WHERE id_producto = $id_producto";
+
+        //1. Preparacion            
+        $sql = $_conexion -> prepare("DELETE FROM productos WHERE id_producto = $id_producto");
+        //2. Enlazado
+        $sql -> bind_param("i",$id_producto);
+        //3. Ejecución
+        $sql -> execute();
+
+
         if ($_conexion->query($sql)) {
             echo "<p class='text-success'>Producto eliminado correctamente.</p>";
         } else {
@@ -106,6 +115,8 @@
                 <?php
                     echo "</tr>";
             }
+            //5.close
+            $_conexion -> close();
         ?>
         </tbody>
     </table>
