@@ -49,8 +49,7 @@
         
         $sql_categorias = "SELECT * FROM categorias";
         $resultado_categorias = $_conexion -> query($sql_categorias);
-        //5.close
-        $_conexion -> close();
+        
         ?>
 
         <?php
@@ -113,19 +112,21 @@
             
 
             if (!$err_nombre && !$err_precio && !$err_categoria && !$err_stock && !$err_descripcion) {
-                $sql = "UPDATE productos SET 
-                    nombre = '$nombre', 
-                    precio = '$precio', 
-                    categoria = '$categoria', 
-                    stock = '$stock', 
-                    descripcion = '$descripcion'
-                    WHERE id_producto = '$id_producto'";
-                if ($_conexion->query($sql)) {
+                //$sql = "UPDATE productos SET nombre = '$nombre', precio = '$precio', categoria = '$categoria', stock = '$stock', descripcion = '$descripcion' WHERE id_producto = '$id_producto'";
+                //1. Preparacion            
+                $sql = $_conexion -> prepare("UPDATE productos SET nombre = ?, precio = ?, categoria = ?, stock = ?, descripcion = ? WHERE id_producto = ?");
+                //2. Enlazado
+                $sql -> bind_param("sisisi",$nombre,$precio,$categoria,$stock,$descripcion,$id_producto);
+                //3. Ejecución
+
+                if ($sql -> execute()) {
                     echo "<p class='text-success'>Producto actualizado correctamente.</p>";
                 } else {
                     echo "<p class='text-danger'>Error al actualizar el producto: " . $_conexion->error . "</p>";
                 }
             }
+            //5.close
+            $_conexion -> close();
         }
         ?>
         

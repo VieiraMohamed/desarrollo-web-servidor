@@ -59,8 +59,14 @@
             if ($count > 0) {
                 echo "<p class='text-danger'>No se puede eliminar la categoría '$categoria' porque tiene productos asociados. Primero elimina los productos y luego inténtalo de nuevo.</p>";
             } else {
-                $sql = "DELETE FROM categorias WHERE categoria = '$categoria'";
-                if ($_conexion->query($sql)) {
+                //$sql = "DELETE FROM categorias WHERE categoria = '$categoria'";
+                //1. Preparacion            
+                $sql = $_conexion -> prepare("DELETE FROM categorias WHERE categoria = ?");
+                //2. Enlazado
+                $sql -> bind_param("s",$categoria);
+                //3. Ejecución
+                
+                if ($sql -> execute()) {
                     echo "<p class='text-success'>Categoría eliminada correctamente.</p>";
                 } else {
                     echo "<p class='text-danger'>Error al eliminar la categoría: " . $_conexion->error . "</p>";

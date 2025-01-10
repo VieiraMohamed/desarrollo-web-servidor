@@ -131,10 +131,8 @@
                 //2. Enlazado
                 $sql -> bind_param("siisss",$nombre,$precio,$stock,$categoria,$tmp_imagen,$descripcion);
                 //3. Ejecución
-                $sql -> execute();
 
-
-                if ($_conexion->query($sql)) {
+                if ($sql -> execute()) {
                     echo "<p class='text-success'>Producto creado correctamente.</p>";
                 } else {
                     echo "<p class='text-danger'>Error al crear el producto: " . $_conexion->error . "</p>";

@@ -74,17 +74,14 @@
         }
 
         if (isset($categoria) && isset($descripcion)) {
-            //$sql = "INSERT INTO categorias (categoria, descripcion) 
-            //VALUES ('$categoria', '$descripcion')";
+            //$sql = "INSERT INTO categorias (categoria, descripcion) VALUES ('$categoria', '$descripcion')";
             //1. Preparacion            
-            $sql = $_conexion -> prepare("INSERT INTO categorias (categoria, descripcion) 
-            VALUES ('$categoria', '$descripcion')");
+            $sql = $_conexion -> prepare("INSERT INTO categorias (categoria, descripcion) VALUES (?,?)");
             //2. Enlazado
             $sql -> bind_param("ss",$categoria,$descripcion);
             //3. Ejecución
-            $sql -> execute();
 
-            if ($_conexion->query($sql)) {
+            if ($sql -> execute()) {
                 echo "<p class='text-success'>Categoría creada correctamente.</p>";
             } else {
                 echo "<p class='text-danger'>Error al crear la categoría: " . $_conexion->error . "</p>";

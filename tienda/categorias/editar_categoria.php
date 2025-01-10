@@ -61,10 +61,7 @@
             $categoria = depurar($_POST["categoria"]);
             $descripcion = depurar($_POST["descripcion"]);
 
-            //$sql= "UPDATE categorias SET
-                //descripcion = '$descripcion'
-                //WHERE categoria = '$categoria'
-            //";
+            //$sql= "UPDATE categorias SET descripcion = '$descripcion' WHERE categoria = '$categoria'";
             //1. Preparacion            
             $sql = $_conexion -> prepare("UPDATE categorias SET descripcion = ? WHERE categoria = ?");
             //2. Enlazado

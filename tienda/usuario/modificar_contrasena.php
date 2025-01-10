@@ -38,17 +38,12 @@
             //$sql = "SELECT * FROM usuarios WHERE usuario = '$usuario'";
             //$resultado = $_conexion->query($sql);
 
-            //1. Preparacion
-            
+            //1. Preparacion            
             $sql = $_conexion -> prepare("SELECT * FROM usuarios WHERE usuario = ?");
             //2. Enlazado
-            $sql -> bind_param("s",
-            $usuario
-            );
-
+            $sql -> bind_param("s",$usuario);
             //3. Ejecución
             $sql -> execute();
-
             //4. Retrieve
             $resultado = $sql -> get_result();
 
@@ -65,17 +60,10 @@
                         //1. Preparacion           
                         $sql_update = $_conexion -> prepare("UPDATE usuarios SET contrasena = ? WHERE usuario = ?");
                         //2. Enlazado
-                        $sql_update -> bind_param("ss",
-                        $hashed_contrasena,$usuario
-                        );
+                        $sql_update -> bind_param("ss",$hashed_contrasena,$usuario);
                         //3. Ejecución
-                        $sql_update -> execute();
-                        
-                        
 
-
-
-                        if ($_conexion->query($sql_update)) {
+                        if ($sql_update -> execute()) {
                             echo "<p class='text-success'>Contraseña actualizada correctamente.</p>";
                         } else {
                             echo "<p class='text-danger'>Error al actualizar la contraseña: " . $_conexion->error . "</p>";
