@@ -49,21 +49,10 @@
         }
         
 
-            /* $sql = "SELECT * FROM estudios ORDER BY nombre_estudio";
-             $resultado = $_conexion -> query($sql); */
+            $sql = "SELECT * FROM estudios ORDER BY nombre_estudio";
+            $resultado = $_conexion -> query($sql);
 
-            /* Las 3 etapas de la prepared statements
-            1. Preparacion */
-            $sql = $_conexion -> prepare("SELECT * FROM estudios ORDER BY ?");
-             //2. Enlazado
-            $sql -> bind_param("s",
-            $nombre_estudio
-            );
-
-            //3. Ejecución
-            $sql -> execute();
-            //4. Retrieve (ESTO ES SOLO PARA LOS SELECT QUE TIENE ALGUN PARAMETRO)
-            $resultado = $sql -> get_result();
+            
         
 
         $estudios = [];
