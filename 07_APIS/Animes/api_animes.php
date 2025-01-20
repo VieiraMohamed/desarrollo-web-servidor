@@ -31,10 +31,46 @@
             break;
     }
 
+    /* 
+    AÑADIR AL GET DE ANIMES LA POSIBILIDAD DE FILTRAR POR:
+- estudio
+- rango del anno_estreno. Si no se ponen los dos rangos (desde y hasta), no se filtra por el año de estreno
+
+- api_animes?estudio=Mappa
+- api_animes?desde=2000&hasta=2010
+- api_animes?desde=2000&hasta=2010&estudio=Diomedéa
+    */
     function manejarGet($_conexion){
-        $sql = "SELECT * FROM animes";
-        $stmt = $_conexion -> prepare($sql);
-        $stmt -> execute();
+        if(isset($_GET["desde"]) && isset($_GET["hasta"]) && isset($_GET["estudio"])){
+            $sql="SELECT * FROM animes WHERE anno_estreno BETWEEN :desde AND :hasta AND nombre_estudio = :nombre_estudio";
+            $stmt = $_conexion -> prepare($sql);
+            $stmt -> execute([
+                "desde" => $_GET["desde"], 
+                "hasta" => $_GET["hasta"],
+                "nombre_estudio" => $_GET["estudio"]
+            ]);
+        }
+        elseif(isset($_GET["desde"]) && isset($_GET["hasta"])){
+            $sql="SELECT * FROM animes WHERE anno_estreno BETWEEN :desde AND :hasta";
+            $stmt = $_conexion -> prepare($sql);
+            $stmt -> execute([
+                "desde" => $_GET["desde"], 
+                "hasta" => $_GET["hasta"]
+            ]);
+        }  
+        elseif(isset($_GET["estudio"])){
+            $sql="SELECT * FROM animes WHERE nombre_estudio = :nombre_estudio";
+            $stmt = $_conexion -> prepare($sql);
+            $stmt -> execute([
+                "nombre_estudio" => $_GET["estudio"]
+            ]);
+        }
+        else{
+            $sql="SELECT * FROM animes";
+            $stmt = $_conexion -> prepare($sql);
+            $stmt -> execute();
+        }
+
         $resultado = $stmt -> fetchALL(PDO::FETCH_ASSOC);//equivalente al getResult de mysqli
         echo json_encode($resultado);
     }

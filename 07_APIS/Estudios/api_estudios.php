@@ -33,10 +33,36 @@
             break;
     }
 
+    /* modificar el codigo paraque se pueda poner el parametro anno_fundacion = 2012
+    y funcione conjuntamente con la ciudad 
+    Es decir, podemos poner estas URL de ejemplo:
+    -api_estudios?ciudad=Malaga
+    -api_estudios=anno_fundacion=2010
+    -api_estudios?ciudad=Tokio&anno_fundacion=2010*/
     function manejarGet($_conexion){
-        $sql = "SELECT * FROM estudios";
-        $stmt = $_conexion -> prepare($sql);
-        $stmt -> execute();
+        if(isset($_GET["ciudad"]) && isset($_GET["anno_fundacion"])){
+            $sql="SELECT * FROM estudios WHERE ciudad = :ciudad AND anno_fundacion = :anno_fundacion";
+            $stmt = $_conexion -> prepare($sql);
+            $stmt -> execute([
+                "ciudad" => $_GET["ciudad"], 
+                "anno_fundacion" => $_GET["anno_fundacion"]
+            ]);
+        }
+        elseif(isset($_GET["anno_fundacion"])){
+            $sql="SELECT * FROM estudios WHERE anno_fundacion = :anno_fundacion";
+            $stmt = $_conexion -> prepare($sql);
+            $stmt -> execute(["anno_fundacion" => $_GET["anno_fundacion"]]);
+        }
+        elseif(isset($_GET["ciudad"])){
+            $sql="SELECT * FROM estudios WHERE ciudad = :ciudad";
+            $stmt = $_conexion -> prepare($sql);
+            $stmt -> execute(["ciudad" => $_GET["ciudad"]]);
+        }else{
+            $sql="SELECT * FROM estudios";
+            $stmt = $_conexion -> prepare($sql);
+            $stmt -> execute();
+        }
+
         $resultado = $stmt -> fetchALL(PDO::FETCH_ASSOC);//equivalente al getResult de mysqli
         echo json_encode($resultado);
     }
