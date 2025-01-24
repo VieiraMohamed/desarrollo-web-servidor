@@ -6,8 +6,18 @@
     <title>Estudios</title>
 </head>
 <body>
+    <form action="" method="GET">
+        <label for="" name="ciudad">Ciudad</label>
+        <input type="text" name="ciudad">
+        <input type="submit" value="Enviar">
+    </form>
     <?php
+    
         $apiURL = "http://localhost/Ejercicios/07_APIS/Estudios/api_estudios.php";
+        if(!empty($_GET["ciudad"])){
+            $ciudad = $_GET["ciudad"];
+            $apiURL = "$apiURL?ciudad=$ciudad";
+        }
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $apiURL);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -15,7 +25,7 @@
         curl_close($curl);
 
         $estudios = json_decode($respusta, true);
-        print_r($estudios);
+        //print_r($estudios);
     ?>
     <table>
         <thead>
@@ -36,5 +46,6 @@
                 <?php } ?>
         </tbody>
     </table>
+    
 </body>
 </html>
