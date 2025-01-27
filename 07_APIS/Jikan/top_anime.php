@@ -36,7 +36,11 @@
             <?php
                 foreach($animes as $anime) { ?>
                 <tr>
-                    <td><?php echo $anime["title"] ?></td>
+                    <td>
+                        <a href="animes.php?id=<?php echo $anime["mal_id"] ?>">
+                        <?php echo $anime["title"] ?>
+                        </a>
+                    </td>
                     <td><?php echo $anime["score"] ?></td>
                     <td><img src="<?php echo $anime["images"]["jpg"]["image_url"] ?>" alt="<?php echo $anime["title"] ?>" style="width: 100px;"></td>
                 </tr>
