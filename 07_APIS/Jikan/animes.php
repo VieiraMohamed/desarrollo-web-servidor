@@ -14,6 +14,9 @@
 <body>
 <div class="container">
     <?php
+    if(!isset($_GET["id"])){
+        header("location: top_anime.php");
+    }
         $id=$_GET["id"];
         $apiURL = "https://api.jikan.moe/v4/anime/$id/full";
         $curl = curl_init();
@@ -26,6 +29,11 @@
         $anime = $datos["data"];
         //print_r($animes)
     ?>
+   
+
+
+
+
 <table class="table table-striped text-center">
         <thead class="table-dark">
             <tr>
