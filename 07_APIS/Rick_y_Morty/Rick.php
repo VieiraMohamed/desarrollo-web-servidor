@@ -13,13 +13,24 @@
 <body>
     <!-- api --   https://rickandmortyapi.com/documentation/  -->
     <?php
-        $cantidad = isset($_GET["cantidad"]) ? (int)$_GET["cantidad"] : 10; // Valor predeterminado de 10
-        $genero = isset($_GET["genero"]) ? $_GET["genero"] : '';
-        $especie = isset($_GET["especie"]) ? $_GET["especie"] : '';
+    if(!isset($_GET["cantidad"]) || $_GET["cantidad"] <= 0 || $_GET["cantidad"] == ""){        
+        $cantidad = 10; 
+    }else{ 
+        $cantidad = $_GET["cantidad"]; 
+    }
 
-        $apiURL = "https://rickandmortyapi.com/api/character";
+    $genero = isset($_GET["genero"]) ? $_GET["genero"] : '';
+    $especie = isset($_GET["especie"]) ? $_GET["especie"] : '';
+
+    $apiURL = "https://rickandmortyapi.com/api/character";
+    $personajes = [];
+    $page = 1;
+    $personajesFiltrados = [];
+
+    // Realizar múltiples solicitudes a la API
+    do {
         $curl = curl_init();
-        curl_setopt($curl, CURLOPT_URL, $apiURL);
+        curl_setopt($curl, CURLOPT_URL, "$apiURL?page=$page");
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         $respuesta = curl_exec($curl);
         curl_close($curl);
@@ -27,15 +38,19 @@
         $datos = json_decode($respuesta, true);
         $personajes = $datos["results"];
 
-        // Filtrar personajes por género y especie si se han especificado
-        $personajesFiltrados = array_filter($personajes, function($personaje) use ($genero, $especie) {
-            $filtraGenero = $genero ? $personaje["gender"] == $genero : true;
-            $filtraEspecie = $especie ? $personaje["species"] == $especie : true;
-            return $filtraGenero && $filtraEspecie;
-        });
+        // Filtrar personajes por género y especie
+        foreach ($personajes as $personaje) {
+            if (($genero === '' || $personaje["gender"] === $genero) && 
+                ($especie === '' || $personaje["species"] === $especie)) {
+                $personajesFiltrados[] = $personaje;
+            }
+        }
+        
+        $page++;
+    } while (count($personajesFiltrados) < $cantidad && isset($datos["info"]["next"]));
 
-        // Limitar la cantidad de personajes mostrados
-        $personajesFiltrados = array_slice($personajesFiltrados, 0, $cantidad);
+    // Limitar la cantidad de personajes mostrados
+    $personajesFiltrados = array_slice($personajesFiltrados, 0, $cantidad);
     ?>
 
     <form action="" method="GET">

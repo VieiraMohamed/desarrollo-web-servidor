@@ -30,7 +30,6 @@
             $page = 1;
         }
         
-
         $apiURL = "https://api.jikan.moe/v4/top/anime?page=$page&type=$type";
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $apiURL);
@@ -46,22 +45,19 @@
         $paginaActual = $paginas["current_page"];
         $siguientePagina =($paginaActual+1);
         $paginaAnterior = ($paginaActual-1);
-        print_r($paginaActual . " " . $totalPaginas);
     ?>
 
     <form action="" method="GET">
-        <input type="radio" id="radio1" name="type" value="tv" <?php echo $type = 'tv'?>>
+        <input type="radio" id="radio1" name="type" value="tv" <?php echo $type == 'tv' ? 'checked' : ''; ?>>
         <label for="radio1">Series</label>
         
-        <input type="radio" id="radio2" name="type" value="movie" <?php echo $type = 'movie'?>>
+        <input type="radio" id="radio2" name="type" value="movie" <?php echo $type == 'movie' ? 'checked' : ''; ?>>
         <label for="radio2">Películas</label>
         
-        <input type="radio" id="radio3" name="type" value="" <?php echo $type = '';?>>
+        <input type="radio" id="radio3" name="type" value="" <?php echo $type == '' ? 'checked' : ''; ?>>
         <label for="radio3">Todo</label>
         <button type="submit" class="btn btn-primary mt-2">Filtrar</button>
     </form>
-
-    
 
     <table class="table table-striped">
         <thead>
@@ -85,20 +81,21 @@
                 </tr>
             <?php }?>
         </tbody>
-        <?php
-            if($paginaActual > 1){ ?>
-                <a href="?page=<?php echo $paginaAnterior ?>&type="<?php echo $type ?> class="btn btn-primary"> Anterior</a>
-            <?php } ?>
-        <?php
-            if($paginaActual < $totalPaginas){ ?>
-                <a href="?page=<?php echo $siguientePagina ?> &type="<?php echo $type ?> class="btn btn-primary"> Siguiente</a>
-            <?php } ?>
-            
     </table>
+
+    <div class="d-flex justify-content-between">
+        <?php if($paginaActual > 1){ ?>
+            <a href="?page=<?php echo $paginaAnterior ?>&type=<?php echo $type ?>" class="btn btn-primary">Anterior</a>
+        <?php } ?>
+        <?php if($paginaActual < $totalPaginas){ ?>
+            <a href="?page=<?php echo $siguientePagina ?>&type=<?php echo $type ?>" class="btn btn-primary">Siguiente</a>
+        <?php } ?>
+    </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
+
 
 <!-- en top_anime.php
   mostrar en una tabla :
