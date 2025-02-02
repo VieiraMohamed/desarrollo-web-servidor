@@ -80,6 +80,8 @@
                 <th scope="col">Nombre</th>
                 <th scope="col">Género</th>
                 <th scope="col">Especie</th>
+                <th scope="col">Origen</th>
+                <th scope="col">Localización</th>
                 <th scope="col">Foto</th>
             </tr>
         </thead>
@@ -89,6 +91,8 @@
                     <td><?php echo $personaje["name"]; ?></td>
                     <td><?php echo $personaje["gender"]; ?></td>
                     <td><?php echo $personaje["species"]; ?></td>
+                    <td><?php echo $personaje["origin"]["name"]; ?></td>
+                    <td><?php echo $personaje["location"]["name"]; ?></td>
                     <td><img src="<?php echo $personaje["image"]; ?>" alt="<?php echo $personaje["name"]; ?>" style="width: 100px;"></td>
                 </tr>
             <?php } ?>

@@ -89,7 +89,7 @@
     if (isset($_GET["imagenes"])) {
         $imagenSeleccionada = $_GET["imagenes"];
         echo "<h3>Foto seleccionada:</h3>";
-        echo "<img src='$imagenSeleccionada' alt='Perrito'>";
+        echo "<img src='$imagenSeleccionada' style='width: 300px' alt='Perrito'>";
     }
     ?>
 </div>
