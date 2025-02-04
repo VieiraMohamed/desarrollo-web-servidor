@@ -34,31 +34,34 @@
             $curl = curl_init();
             curl_setopt($curl, CURLOPT_URL, $apiURL);
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-
+            
             // Ejecutar la solicitud y obtener el resultado
             $respuesta = curl_exec($curl);
-
-            if ($respuesta === false) {
-                echo "Error en la solicitud a la API.";
-                die();
-            }
-
-            $razasData = json_decode($respuesta, true);
-
-            // Verificar si es un array y no una cadena de texto
-            if (is_array($razasData['message'])) {
-                foreach ($razasData['message'] as $raza => $subRazas) {
-                    // Mostrar la raza principal si no hay subrazas
-                    if (empty($subRazas)) {
-                        echo "<option value=\"$raza\">$raza</option>";
-                    } else {
-                        foreach ($subRazas as $sRaza => $imagen) {
-                            echo "<option value=\"$raza-$sRaza\">$raza - $sRaza</option>";
+            
+            if (curl_errno($curl)) {
+                echo "<p>Error: " . curl_error($curl) . "</p>";
+            } else {
+                // Decodificar la respuesta JSON
+                $razasData = json_decode($respuesta, true);
+                
+                // Verificar si es un array y no una cadena de texto
+                if (is_array($razasData['message'])) {
+                    foreach ($razasData['message'] as $raza => $subRazas) {
+                        // Mostrar la raza principal si no hay subrazas
+                        if (empty($subRazas)) {
+                            echo "<option value=\"$raza\">$raza</option>";
+                        } else {
+                            foreach ($subRazas as $sRaza => $imagen) {
+                                echo "<option value=\"$raza-$sRaza\">$raza - $sRaza</option>";
+                            }
                         }
                     }
+                } else {
+                    // Si la respuesta no es un array, mostrar un mensaje de error
+                    echo "<p>Error en la respuesta de la API.</p>";
                 }
             }
-
+            
             curl_close($curl);
         ?>
     </select>
@@ -66,15 +69,16 @@
 </form>
 
 <?php
+// Procesar la selección de raza o mostrar fotos disponibles
 if (!empty($_GET["raza"])) {
     $razaElegida = $_GET["raza"];
-
+    
     // URL base para obtener imágenes de la raza elegida
     if (strpos($razaElegida, "-")) {
         list($categoria, $subRaza) = explode('-', $razaElegida);
         
         // URL de la API para obtener imágenes específicas de la sub-raza
-        $apiURL = "https://dog.ceo/api/breed/{$categoria}/$subRaza/images";
+        $apiURL = "https://dog.ceo/api/breed/{$categoria}/{$subRaza}/images";
     } else {
         // Si no hay sub-raza, seleccionamos la raza principal
         $categoria = $razaElegida;
@@ -82,47 +86,45 @@ if (!empty($_GET["raza"])) {
         // URL de la API para obtener imágenes generales de la categoría
         $apiURL = "https://dog.ceo/api/breed/{$categoria}/images";
     }
-
+    
     $curl = curl_init();
     curl_setopt($curl, CURLOPT_URL, $apiURL);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
     $respuesta = curl_exec($curl);
-
-    if ($respuesta === false) {
-        echo "Error en la solicitud a la API.";
+    if (curl_errno($curl)) {
+        echo "<p>Error: " . curl_error($curl) . "</p>";
     } else {
+        // Decodificar la respuesta JSON
         $imagenesData = json_decode($respuesta, true);
-        
+
         if ($imagenesData['status'] === 'success' && isset($imagenesData['message'])) {
             $fotosDisponibles = $imagenesData['message'];
 
-            // Mostrar todas las fotos disponibles para esa raza/sub-raza
             echo '<form method="GET" action="">';
+            
+            // Mostrar todas las fotos disponibles para esa raza/sub-raza
             echo '<label for="imagenElegida">Selecciona una foto:</label><br/>';
             echo '<select name="imagenElegida" id="imagenSelect">';
-            
             foreach ($fotosDisponibles as $indice => $imagen) {
-                // Verificar si la URL de la imagen es válida
-                if (filter_var($imagen, FILTER_VALIDATE_URL)) {
-                    echo "<option value=\"$imagen\">[$indice] <img src='$imagen' alt='Miniatura' style='width: 50px;' /></option>";
-                }
+                // Mostrar la imagen con un miniatura y el índice
+                echo "<option value=\"$imagen\">[$indice] <img src='$imagen' alt='Miniatura' style='width: 50px;'/></option>";
             }
-            
             echo '</select>';
+            
             echo '<button type="submit">Mostrar Foto</button>';
             echo '</form>';
 
-            // Mostrar la imagen elegida
+            // Mostrar la imagen elegida si se selecciona
             if (!empty($_GET["imagenElegida"])) {
                 $imagenElegida = $_GET["imagenElegida"];
                 
-                if (filter_var($imagenElegida, FILTER_VALIDATE_URL)) {
-                    echo '<img src="' . htmlspecialchars($imagenElegida, ENT_QUOTES, 'UTF-8') . '" style="width: 300px;" />';
-                } else {
-                    echo "URL de la imagen no válida.";
+                // Verificar si la imagen elegida existe en el array de fotos disponibles
+                foreach ($fotosDisponibles as $indice => $img) {
+                    if ($img === $imagenElegida) {
+                        echo '<img src="' . $imagenElegida . '" style="width: 300px;" />';
+                        break;
+                    }
                 }
-            } else {
-                echo "<p>No hay fotos disponibles.</p>";
             }
         } else {
             echo "<p>No hay fotos disponibles.</p>";
@@ -132,5 +134,8 @@ if (!empty($_GET["raza"])) {
     }
 }
 ?>
+
+<a href="perrito_aleatorio.php">FETCH</a>
+
 </body>
 </html>
