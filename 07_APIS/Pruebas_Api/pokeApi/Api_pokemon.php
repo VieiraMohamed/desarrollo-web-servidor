@@ -20,7 +20,7 @@
             <select name="pokemon" id="pokemon">
                 <option value="" selected disabled>-- Selecciona un Pokémon --</option>
                 <?php
-                $apiURL = "https://pokeapi.co/api/v2/pokemon/?offset=0&limit=1000";
+                $apiURL = "https://pokeapi.co/api/v2/pokemon/?offset=0&limit=1304";
                 $curl = curl_init();
                 curl_setopt($curl, CURLOPT_URL, $apiURL);
                 curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -28,6 +28,9 @@
                 curl_close($curl);
 
                 $pokemonData = json_decode($respuesta, true);
+
+                $totalPokemon = count($pokemonData['results']);
+
                 foreach ($pokemonData['results'] as $pokemonItem) {
                     $pokemonName = $pokemonItem['name'];
                     echo "<option value=\"$pokemonName\" " . (isset($_GET["pokemon"]) && $_GET["pokemon"] == $pokemonName ? 'selected' : '') . ">$pokemonName</option>";
@@ -36,7 +39,7 @@
             </select>
             <button type="submit">Mostrar Pokemon</button>
         </div>
-
+                <p>Total de pokemons disponible:<?php  echo $totalPokemon ?></p>
         <?php
         if (isset($_GET["pokemon"]) && !empty($_GET["pokemon"])) {
             $pokemonElegido = $_GET["pokemon"];

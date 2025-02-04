@@ -31,7 +31,7 @@
                     <?php } else {
                         echo '<optgroup label="' . $raza . '">';
                         foreach($subrazas as $subraza){ ?>
-                            <option value="<?php echo $raza . '/'. $subraza; ?>"><?php echo $subraza . ' '. $raza ; ?></option>
+                            <option value="<?php echo $raza; ?>"><?php echo $subraza . ' ' . $raza; ?></option>
                         <?php }
                         echo '</optgroup>';
                     }
