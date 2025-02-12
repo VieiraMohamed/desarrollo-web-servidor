@@ -16,7 +16,8 @@ use App\Http\Controllers\MarcaController;
 |
 */
 
-Route::get('/marcas', [MarcaController::class, 'index']);
+//Route::get('/marcas', [MarcaController::class, 'index']);
+Route::resource('marcas', MarcaController::class);
 
 Route::get('/coches' , [CocheController::class, 'index']);
 
